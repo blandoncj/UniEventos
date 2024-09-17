@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">UniEventos</string>
+
+    <!--    text for the form fields-->
+    <string name="empty_field">Este campo no puede estar vacío.</string>
+    <string name="cedula_lbl">Cédula</string>
+    <string name="cedula_length">Cédula inválida, debe contener 8 o 10 dígitos.</string>
+    <string name="cedula_already_exists">Cédula inválida, ya existe una cuenta con esta.</string>
+    <string name="name_lbl">Nombre</string>
+    <string name="name_length">Nombre inválido, debe contener al menos 3 caracteres.</string>
+    <string name="name_format">Nombre inválido, solo puede contener letras y espacios.</string>
+    <string name="city_lbl">Ciudad</string>
+    <string name="city_placeholder">Seleccione una ciudad</string>
+    <string name="phone_lbl">Teléfono</string>
+    <string name="phone_length">Teléfono inválido, debe contener 10 dígitos.</string>
+    <string name="phone_already_exists">Teléfono inválido, ya existe una cuenta con este.</string>
+    <string name="email_lbl">Correo Electrónico</string>
+    <string name="email_invalid">Correo Electrónico inválido.</string>
+    <string name="email_already_exists">Correo Electrónico inválido, ya existe una cuenta con este.</string>
+    <string name="password_lbl">Contraseña</string>
+    <string name="password_confirm_lbl">Confirmar Contraseña</string>
+    <string name="password_length">Contraseña inválida, debe contener al menos 6 caracteres.</string>
+    <string name="passwords_dont_match">Las contraseñas no coinciden.</string>
+
+    <!--    text for the buttons-->
+    <string name="login_btn">Iniciar Sesión</string>
+    <string name="register_btn">Registrarse</string>
+    <string name="create_account_btn">Crear Cuenta</string>
+    <string name="forgot_password_btn">¿Olvidaste tú contraseña?</string>
+    <string name="send_code_btn">Enviar Código</string>
+
+    <!--    text for the legends of the screens-->
+    <string name="about">Acerca de ti</string>
+    <string name="recover_password">Introduce tú correo electrónico para que podamos enviarte un código de recuperación</string>
+
 </resources>
