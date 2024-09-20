@@ -21,6 +21,9 @@
     <string name="password_confirm_lbl">Confirmar Contraseña</string>
     <string name="password_length">Contraseña inválida, debe contener al menos 6 caracteres.</string>
     <string name="passwords_dont_match">Las contraseñas no coinciden.</string>
+    <string name="code_lbl">Código de Verificación</string>
+    <string name="code_length">Código inválido, debe contener 6 dígitos.</string>
+    <string name="code_not_found">Código inválido, verifique que sea correcto.</string>
 
     <!--    text for the buttons-->
     <string name="login_btn">Iniciar Sesión</string>
@@ -28,9 +31,12 @@
     <string name="create_account_btn">Crear Cuenta</string>
     <string name="forgot_password_btn">¿Olvidaste tú contraseña?</string>
     <string name="send_code_btn">Enviar Código</string>
+    <string name="confirm_btn">Confirmar</string>
+    <string name="resend_code_btn">Reenviar Código</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>
     <string name="recover_password">Introduce tú correo electrónico para que podamos enviarte un código de recuperación</string>
+    <string name="code_description">Te enviamos un código de 6 dígitos a tu correo. Introdúcelo a continuación.</string>
 
 </resources>

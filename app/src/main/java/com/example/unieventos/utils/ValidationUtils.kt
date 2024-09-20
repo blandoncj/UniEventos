@@ -1,6 +1,7 @@
 package com.example.unieventos.utils
 
 import com.example.unieventos.enums.CedulaError
+import com.example.unieventos.enums.CodeError
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
@@ -62,6 +63,15 @@ fun validatePhone(phone: String): PhoneError {
         phone.length != 10 -> PhoneError.INVALID_LENGTH
         phone == "1234567890" -> PhoneError.ALREADY_REGISTERED
         else -> PhoneError.NONE
+    }
+}
+
+fun validateCode(code: String): CodeError {
+    return when {
+        code.isEmpty() -> CodeError.EMPTY
+        code.length != 6 -> CodeError.INVALID_LENGTH
+        code != "123456" -> CodeError.NOT_FOUND
+        else -> CodeError.NONE
     }
 }
 
