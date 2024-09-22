@@ -1,11 +1,10 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.utils
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 
 /**
  * A back button that navigates back to the previous screen.
@@ -13,15 +12,13 @@ import androidx.compose.ui.Modifier
  */
 @Composable
 fun BackButton(
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onBack: () -> Unit = {},
 ) {
     IconButton(
-        onClick = onClick,
-        modifier = modifier
+        onClick = { onBack() }
     ) {
         Icon(
-            imageVector = Icons.Filled.ArrowBack,
+            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
             contentDescription = "Back"
         )
     }

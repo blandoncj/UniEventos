@@ -9,12 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,26 +18,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.unieventos.R
 import com.example.unieventos.enums.CedulaError
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
-import com.example.unieventos.ui.components.BackButton
-import com.example.unieventos.ui.components.CedulaField
-import com.example.unieventos.ui.components.CityField
-import com.example.unieventos.ui.components.EmailField
-import com.example.unieventos.ui.components.NameField
-import com.example.unieventos.ui.components.PasswordField
-import com.example.unieventos.ui.components.PhoneField
-import com.example.unieventos.ui.components.PrimaryButton
+import com.example.unieventos.ui.components.utils.CustomTopAppBar
+import com.example.unieventos.ui.components.customer.CustomerForm
+import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.utils.validateCedula
 import com.example.unieventos.utils.validateEmail
-import com.example.unieventos.utils.validateEmailFormat
 import com.example.unieventos.utils.validateFields
 import com.example.unieventos.utils.validateName
 import com.example.unieventos.utils.validatePasswordFormat
@@ -50,12 +37,13 @@ import com.example.unieventos.utils.validatePasswordsMatch
 import com.example.unieventos.utils.validatePhone
 
 /**
- * Signup screen composable function.
- * This composable function displays the signup screen.
+ * SignupScreen composable is a screen that displays the signup form.
+ * @param onBack The callback to navigate back.
+ * @param onNavigateToConfirmAccount The callback to navigate to the confirm account screen.
  */
 @Composable
 fun SignupScreen(
-    onNavigateToLogin: () -> Unit,
+    onBack: () -> Unit,
     onNavigateToConfirmAccount: () -> Unit
 ) {
     var cedula by rememberSaveable { mutableStateOf("") }
@@ -75,7 +63,11 @@ fun SignupScreen(
 
     val scrollState = rememberScrollState()
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(title = stringResource(id = R.string.about), onBack = onBack)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -85,132 +77,53 @@ fun SignupScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Spacer(modifier = Modifier.height(10.dp))
-
-                BackButton(
-                    onClick = {
-                        onNavigateToLogin()
-                    }
-                )
-            }
-
-            Text(
-                text = stringResource(id = R.string.about),
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
-
             Spacer(modifier = Modifier.height(20.dp))
 
-            CedulaField(
+            CustomerForm(
                 cedula = cedula,
                 onCedulaChange = {
                     cedula = it
                     cedulaError = validateCedula(it)
                 },
                 cedulaError = cedulaError,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            NameField(
                 name = name,
                 onNameChange = {
                     name = it
                     nameError = validateName(it)
                 },
                 nameError = nameError,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            PhoneField(
                 phone = phone,
                 onPhoneChange = {
                     phone = it
                     phoneError = validatePhone(it)
                 },
                 phoneError = phoneError,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            CityField(
                 city = city,
-                expanded = expandedCity,
+                expandedCity = expandedCity,
                 onExpandedChange = { expandedCity = it },
                 onCitySelected = { city = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            EmailField(
                 email = email,
                 onEmailChange = {
                     email = it
                     emailError = validateEmail(it)
                 },
                 emailError = emailError,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            PasswordField(
                 password = password,
                 onPasswordChange = {
                     password = it
                     passwordError = validatePasswordFormat(it)
                 },
                 passwordError = passwordError,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            PasswordField(
-                label = stringResource(id = R.string.password_confirm_lbl),
-                password = confirmPassword,
-                onPasswordChange = {
+                confirmPassword = confirmPassword,
+                onConfirmPasswordChange = {
                     confirmPassword = it
                     confirmPasswordError = validatePasswordsMatch(password, it)
                 },
-                passwordError = confirmPasswordError,
-                modifier = Modifier.fillMaxWidth()
+                confirmPasswordError = confirmPasswordError
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            PrimaryButton(
-                text = stringResource(id = R.string.create_account_btn),
-                enabled = cedulaError == CedulaError.NONE &&
-                        nameError == NameError.NONE &&
-                        phoneError == PhoneError.NONE &&
-                        emailError == EmailError.NONE &&
-                        passwordError == PasswordError.NONE &&
-                        confirmPasswordError == PasswordError.NONE &&
-                        validateFields(
-                            listOf(
-                                cedula,
-                                name,
-                                phone,
-                                city,
-                                email,
-                                password,
-                                confirmPassword
-                            )
-                        ),
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { onNavigateToConfirmAccount() }
-            )
         }
     }
 }

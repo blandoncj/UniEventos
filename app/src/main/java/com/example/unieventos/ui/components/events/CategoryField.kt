@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.events
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,28 +12,35 @@ import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
 
 /**
- * A city field that shows a list of cities in a dropdown menu.
- * @param city The selected city.
- * @param onCitySelected The callback to select a city.
+ * A category field that shows a list of categories in a dropdown menu.
+ * @param category The selected category.
+ * @param onCategorySelected The callback to select a category.
  * @param expanded The state of the dropdown menu.
  * @param onExpandedChange The callback to change the state of the dropdown menu.
- * @param modifier The modifier to be applied to the city field.
+ * @param modifier The modifier to be applied to the category field.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CityField(
-    city: String,
-    onCitySelected: (String) -> Unit,
+fun CategoryField(
+    category: String,
+    onCategorySelected: (String) -> Unit,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val cities =
+    val categories =
         listOf(
-            "Armenia",
-            "Pereira",
-            "Manizales",
-            "Medellín"
+            "Conferencia",
+            "Concierto",
+            "Deportes",
+            "Fiesta",
+            "Cine",
+            "Teatro",
+            "Festival",
+            "Exposición",
+            "Taller",
+            "Curso",
+            "Otro"
         )
 
     ExposedDropdownMenuBox(
@@ -41,12 +48,12 @@ fun CityField(
         onExpandedChange = { onExpandedChange(!expanded) },
     ) {
         OutlinedTextField(
-            value = city,
+            value = category,
             onValueChange = { },
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            label = { Text(text = stringResource(id = R.string.cit_lbl)) },
-            placeholder = { Text(text = stringResource(id = R.string.cit_ph)) },
+            label = { Text(text = stringResource(id = R.string.cat_lbl)) },
+            placeholder = { Text(text = stringResource(id = R.string.cat_ph)) },
             modifier = Modifier
                 .menuAnchor()
                 .then(modifier)
@@ -56,11 +63,11 @@ fun CityField(
             expanded = expanded,
             onDismissRequest = { onExpandedChange(false) }
         ) {
-            cities.forEach() { city ->
+            categories.forEach() { category ->
                 DropdownMenuItem(
-                    text = { Text(text = city) },
+                    text = { Text(text = category) },
                     onClick = {
-                        onCitySelected(city)
+                        onCategorySelected(category)
                         onExpandedChange(false)
                     }
                 )

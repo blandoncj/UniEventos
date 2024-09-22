@@ -1,42 +1,69 @@
 <resources>
     <string name="app_name">UniEventos</string>
 
-    <!--    text for the form fields-->
+    <!-- text for labels -->
+    <string name="ced_lbl">Cédula</string>
+    <string name="nam_lbl">Nombre</string>
+    <string name="cit_lbl">Ciudad</string>
+    <string name="pho_lbl">Teléfono</string>
+    <string name="date_lbl">Fecha</string>
+    <string name="pass_lbl">Contraseña</string>
+    <string name="pass_confirm_lbl">Confirmar Contraseña</string>
+    <string name="cod_lbl">Código</string>
+    <string name="create_evt_lbl">Crear Evento</string>
+    <string name="desc_lbl">Descripción</string>
+    <string name="cat_lbl">Categoría</string>
+    <string name="create_cpn_lbl">Crear Cupón</string>
+    <string name="disc_lbl">Descuento</string>
+    <string name="ema_lbl">Correo Electrónico</string>
+    <string name="address_lbl">Dirección</string>
+    <string name="events_lbl">Eventos</string>
+    <string name="coupons_lbl">Cupones</string>
+    <string name="profile_lbl">Perfil</string>
+
+    <!-- text for placeholders -->
+    <string name="cit_ph">Seleccione una ciudad</string>
+    <string name="cat_ph">Seleccione una categoría</string>
+    <string name="cpn_disc_ph">Seleccione un descuento</string>
+    <string name="date_ph">Seleccione una fecha</string>
+
+    <!-- text for error messages -->
     <string name="empty_field">Este campo no puede estar vacío.</string>
-    <string name="cedula_lbl">Cédula</string>
-    <string name="cedula_length">Cédula inválida, debe contener 8 o 10 dígitos.</string>
-    <string name="cedula_already_exists">Cédula inválida, ya existe una cuenta con esta.</string>
-    <string name="name_lbl">Nombre</string>
-    <string name="name_length">Nombre inválido, debe contener al menos 3 caracteres.</string>
-    <string name="name_format">Nombre inválido, solo puede contener letras y espacios.</string>
-    <string name="city_lbl">Ciudad</string>
-    <string name="city_placeholder">Seleccione una ciudad</string>
-    <string name="phone_lbl">Teléfono</string>
-    <string name="phone_length">Teléfono inválido, debe contener 10 dígitos.</string>
-    <string name="phone_already_exists">Teléfono inválido, ya existe una cuenta con este.</string>
-    <string name="email_lbl">Correo Electrónico</string>
-    <string name="email_invalid">Correo Electrónico inválido.</string>
-    <string name="email_already_exists">Correo Electrónico inválido, ya existe una cuenta con este.</string>
-    <string name="password_lbl">Contraseña</string>
-    <string name="password_confirm_lbl">Confirmar Contraseña</string>
-    <string name="password_length">Contraseña inválida, debe contener al menos 6 caracteres.</string>
-    <string name="passwords_dont_match">Las contraseñas no coinciden.</string>
-    <string name="code_lbl">Código de Verificación</string>
-    <string name="code_length">Código inválido, debe contener 6 dígitos.</string>
-    <string name="code_not_found">Código inválido, verifique que sea correcto.</string>
+    <string name="ced_length_err">Cédula inválida, debe contener 8 o 10 dígitos.</string>
+    <string name="ced_exists_err">Cédula inválida, ya existe una cuenta con esta.</string>
+    <string name="nam_length_err">Nombre inválido, debe contener al menos 3 caracteres.</string>
+    <string name="nam_format_err">Nombre inválido, solo puede contener letras y espacios.</string>
+    <string name="cpn_nam_exists_err">Nombre inválido, ya se encuentra en uso.</string>
+    <string name="pho_length_err">Teléfono inválido, debe contener 10 dígitos.</string>
+    <string name="pho_exists_err">Teléfono inválido, ya existe una cuenta con este.</string>
+    <string name="pass_length_err">Contraseña inválida, debe contener al menos 6 caracteres.</string>
+    <string name="pass_match_err">Las contraseñas no coinciden.</string>
+    <string name="cod_length_err">Código inválido, debe contener 6 dígitos.</string>
+    <string name="cod_found_err">Código inválido, verifique que sea correcto.</string>
+    <string name="evt_desc_length">Descripción inválida, debe contener al menos 10 caracteres.</string>
+    <string name="evt_date_err">Fecha inválida, debe posterior a la actual.</string>
+    <string name="cpn_cod_length_err">Código inválido, debe contener 8 carácteres.</string>
+    <string name="cpn_cod_exists_err">Código inválido, ya se encuentra en uso.</string>
+    <string name="ema_format_err">Correo Electrónico inválido.</string>
+    <string name="ema_exists_err">Correo Electrónico inválido, ya existe una cuenta con este.</string>
+    <string name="invalid_credentials">Usuario o contraesña incorrectos</string>
 
     <!--    text for the buttons-->
     <string name="login_btn">Iniciar Sesión</string>
     <string name="register_btn">Registrarse</string>
     <string name="create_account_btn">Crear Cuenta</string>
+    <string name="update_account_btn">Actualizar Cuenta</string>
+    <string name="delete_account_btn">Eliminar Cuenta</string>
     <string name="forgot_password_btn">¿Olvidaste tú contraseña?</string>
     <string name="send_code_btn">Enviar Código</string>
     <string name="confirm_btn">Confirmar</string>
     <string name="resend_code_btn">Reenviar Código</string>
+    <string name="cancel_btn">Cancelar</string>
+    <string name="create_coupon_btn">Crear Cupón</string>
+    <string name="create_event_btn">Crear Evento</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>
     <string name="recover_password">Introduce tú correo electrónico para que podamos enviarte un código de recuperación</string>
     <string name="code_description">Te enviamos un código de 6 dígitos a tu correo. Introdúcelo a continuación.</string>
-
 </resources>

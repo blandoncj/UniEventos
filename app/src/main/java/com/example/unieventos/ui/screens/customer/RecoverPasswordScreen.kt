@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.EmailError
-import com.example.unieventos.ui.components.BackButton
+import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.EmailField
-import com.example.unieventos.ui.components.PrimaryButton
+import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.utils.validateEmailFormat
 
 /**
@@ -36,22 +32,17 @@ import com.example.unieventos.utils.validateEmailFormat
  */
 @Composable
 fun RecoverPasswordScreen(
-    onNavigateToLogin: () -> Unit,
+    onBack: () -> Unit,
     onNavigateToChangePassword: () -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var emailError by rememberSaveable { mutableStateOf(EmailError.NONE) }
 
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            BackButton(onClick = { onNavigateToLogin() })
+    Scaffold(
+        topBar = {
+             CustomTopAppBar(title = "Recuperar Contraseña", onBack = onBack)
         }
-
+    ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)

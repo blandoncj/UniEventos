@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.coupons
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,28 +12,34 @@ import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
 
 /**
- * A city field that shows a list of cities in a dropdown menu.
- * @param city The selected city.
- * @param onCitySelected The callback to select a city.
+ * CouponDiscountField is a composable that displays a text field for the user to input the coupon's discount.
+ * @param discount The discount that the user has input.
+ * @param modifier The modifier for the CouponDiscountField.
  * @param expanded The state of the dropdown menu.
  * @param onExpandedChange The callback to change the state of the dropdown menu.
- * @param modifier The modifier to be applied to the city field.
+ * @param onDiscountSelected The callback to select a discount.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CityField(
-    city: String,
-    onCitySelected: (String) -> Unit,
+fun CouponDiscountField(
+    discount: String,
+    modifier: Modifier = Modifier,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
+    onDiscountSelected: (String) -> Unit
 ) {
-    val cities =
+    val discounts =
         listOf(
-            "Armenia",
-            "Pereira",
-            "Manizales",
-            "Medellín"
+            "5",
+            "10",
+            "15",
+            "20",
+            "25",
+            "30",
+            "35",
+            "40",
+            "45",
+            "50"
         )
 
     ExposedDropdownMenuBox(
@@ -41,12 +47,12 @@ fun CityField(
         onExpandedChange = { onExpandedChange(!expanded) },
     ) {
         OutlinedTextField(
-            value = city,
+            value = discount,
             onValueChange = { },
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            label = { Text(text = stringResource(id = R.string.cit_lbl)) },
-            placeholder = { Text(text = stringResource(id = R.string.cit_ph)) },
+            label = { Text(text = stringResource(id = R.string.disc_lbl)) },
+            placeholder = { Text(text = stringResource(id = R.string.cpn_disc_ph)) },
             modifier = Modifier
                 .menuAnchor()
                 .then(modifier)
@@ -56,11 +62,11 @@ fun CityField(
             expanded = expanded,
             onDismissRequest = { onExpandedChange(false) }
         ) {
-            cities.forEach() { city ->
+            discounts.forEach() { discount ->
                 DropdownMenuItem(
-                    text = { Text(text = city) },
+                    text = { Text(text = discount) },
                     onClick = {
-                        onCitySelected(city)
+                        onDiscountSelected(discount)
                         onExpandedChange(false)
                     }
                 )

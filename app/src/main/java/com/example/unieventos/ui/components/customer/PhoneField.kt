@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.customer
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -28,7 +28,7 @@ fun PhoneField(
     OutlinedTextField(
         value = phone,
         onValueChange = onPhoneChange,
-        label = { Text(text = stringResource(id = R.string.phone_lbl)) },
+        label = { Text(text = stringResource(id = R.string.pho_lbl)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
         isError = phoneError != PhoneError.NONE,
@@ -40,12 +40,12 @@ fun PhoneField(
                 )
 
                 PhoneError.INVALID_LENGTH -> Text(
-                    text = stringResource(id = R.string.phone_length),
+                    text = stringResource(id = R.string.pho_length_err),
                     color = Color.Red
                 )
 
                 PhoneError.ALREADY_REGISTERED -> Text(
-                    text = stringResource(id = R.string.phone_already_exists),
+                    text = stringResource(id = R.string.pho_exists_err),
                     color = Color.Red
                 )
 

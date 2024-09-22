@@ -28,7 +28,7 @@ fun EmailField(
     OutlinedTextField(
         value = email,
         onValueChange = onEmailChange,
-        label = { Text(text = stringResource(id = R.string.email_lbl)) },
+        label = { Text(text = stringResource(id = R.string.ema_lbl)) },
         singleLine = true,
         isError = emailError != EmailError.NONE,
         supportingText = {
@@ -39,12 +39,12 @@ fun EmailField(
                 )
 
                 EmailError.INVALID_FORMAT -> Text(
-                    text = stringResource(id = R.string.email_invalid),
+                    text = stringResource(id = R.string.ema_format_err),
                     color = Color.Red
                 )
 
                 EmailError.ALREADY_REGISTERED -> Text(
-                    text = stringResource(id = R.string.email_already_exists),
+                    text = stringResource(id = R.string.ema_exists_err),
                     color = Color.Red
                 )
 
