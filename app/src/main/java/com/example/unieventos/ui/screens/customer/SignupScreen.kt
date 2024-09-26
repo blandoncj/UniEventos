@@ -124,6 +124,17 @@ fun SignupScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            PrimaryButton(
+                text = stringResource(id = R.string.register_btn),
+                enabled = cedulaError == CedulaError.NONE &&
+                        nameError == NameError.NONE &&
+                        phoneError == PhoneError.NONE &&
+                        emailError == EmailError.NONE &&
+                        passwordError == PasswordError.NONE &&
+                        confirmPasswordError == PasswordError.NONE &&
+                        validateFields(listOf(cedula, name, phone, email, password, confirmPassword)),
+                onClick = onNavigateToConfirmAccount
+            )
         }
     }
 }

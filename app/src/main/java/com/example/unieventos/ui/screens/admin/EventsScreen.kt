@@ -20,6 +20,7 @@ import dev.chrisbanes.haze.haze
  */
 @Composable
 fun EventsScreen(
+    getEventList: () -> List<Event>,
     paddingValues: PaddingValues,
     onNavigateToEventDetail: (Int) -> Unit,
     hazeState: HazeState
@@ -39,13 +40,4 @@ fun EventsScreen(
             )
         }
     }
-}
-
-private fun getEventList(): List<Event> {
-    return listOf(
-        Event(1, "Evento 1", "Armenia", "2021-10-10", "https://loremflickr.com/400/400/football"),
-        Event(2, "Evento 2", "Pereira", "2021-10-10", "https://loremflickr.com/400/400/football"),
-        Event(3, "Evento 3", "Manizales", "2021-10-10", "https://loremflickr.com/400/400/football"),
-        Event(4, "Evento 4", "Medellín", "2021-10-10", "https://loremflickr.com/400/400/football"),
-    )
 }

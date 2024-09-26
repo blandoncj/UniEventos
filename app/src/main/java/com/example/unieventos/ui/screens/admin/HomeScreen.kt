@@ -6,9 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.example.unieventos.R
 import com.example.unieventos.ui.components.admin.AdminBottomBar
 import com.example.unieventos.ui.components.utils.MainTopBar
 import com.example.unieventos.ui.components.utils.FloatingAddButton
+import com.example.unieventos.viewmodel.EventsViewModel
 import dev.chrisbanes.haze.HazeState
 
 /**
@@ -17,6 +20,7 @@ import dev.chrisbanes.haze.HazeState
  */
 @Composable
 fun HomeAdminScreen(
+    eventsViewModel: EventsViewModel,
     onNavigateToEventDetail: (Int) -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit,
@@ -30,9 +34,9 @@ fun HomeAdminScreen(
         topBar = {
             MainTopBar(
                 when (selectedTab) {
-                    0 -> "Eventos"
-                    1 -> "Cupones"
-                    else -> "Eventos"
+                    0 -> stringResource(id = R.string.events_lbl)
+                    1 -> stringResource(id = R.string.coupons_lbl)
+                    else -> stringResource(id = R.string.events_lbl)
                 },
                 hazeState = hazeState
             )
@@ -54,6 +58,7 @@ fun HomeAdminScreen(
     ) { paddingValues ->
         when (selectedTab) {
             0 -> EventsScreen(
+                getEventList = { eventsViewModel.events.value },
                 paddingValues = paddingValues,
                 onNavigateToEventDetail = onNavigateToEventDetail,
                 hazeState = hazeState

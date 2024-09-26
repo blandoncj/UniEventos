@@ -16,12 +16,15 @@ import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
+import com.example.unieventos.viewmodel.EventsViewModel
 
 /**
  * Navigation composable that handles the navigation between screens.
  */
 @Composable
-fun Navigation() {
+fun Navigation(
+    eventsViewModel: EventsViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -74,6 +77,7 @@ fun Navigation() {
 
         composable<RouteScreen.AdminHome> {
             HomeAdminScreen(
+                eventsViewModel = eventsViewModel,
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(
@@ -119,6 +123,7 @@ fun Navigation() {
 
         composable<RouteScreen.CustomerHome> {
             CustomerHomeScreen(
+                eventsViewModel = eventsViewModel,
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetail(eventId))
                 }
