@@ -105,6 +105,7 @@ fun Navigation(
         composable<RouteScreen.EventDetail> {
             val eventId = it.toRoute<RouteScreen.EventDetail>()
             EventDetailScreen(
+                eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
                 onBack = { navController.popBackStack() }
             )
