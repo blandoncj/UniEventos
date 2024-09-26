@@ -17,12 +17,14 @@ import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
  * Navigation composable that handles the navigation between screens.
  */
 @Composable
 fun Navigation(
+    usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel
 ) {
     val navController = rememberNavController()
@@ -33,6 +35,7 @@ fun Navigation(
     ) {
         composable<RouteScreen.Login> {
             LoginScreen(
+                usersViewModel = usersViewModel,
                 onNavigateToSignup = { navController.navigate(RouteScreen.Signup) },
                 onNavigateToRecoverPassword = { navController.navigate(RouteScreen.RecoverPassword) },
                 onNavigateToAdminHome = {

@@ -15,9 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.unieventos.ui.navigation.Navigation
 import com.example.unieventos.ui.theme.UniEventosTheme
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 
 class MainActivity : ComponentActivity() {
 
+    private val usersViewModel: UsersViewModel by viewModels()
     private val eventsViewModel: EventsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             UniEventosTheme {
                 Navigation(
+                    usersViewModel = usersViewModel,
                     eventsViewModel = eventsViewModel
                 )
             }
