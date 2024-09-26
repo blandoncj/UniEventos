@@ -20,17 +20,21 @@ import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.PasswordError
+import com.example.unieventos.enums.Role
 import com.example.unieventos.ui.components.LoginForm
 import com.example.unieventos.utils.validateEmailFormat
+import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
  * login form composable is a screen that displays the login form.
+ * @param usersViewModel The view model to handle the users data.
  * @param onNavigateToSignup The callback to navigate to the signup screen.
  * @param onNavigateToRecoverPassword The callback to navigate to the recover password screen.
- * @param onNavigateToAdminHome The callback to navigate to the admin home screen.
+ * @param onNavigateToAdminHome The callback to navigate to  the admin home screen.
  */
 @Composable
 fun LoginScreen(
+    usersViewModel: UsersViewModel,
     onNavigateToSignup: () -> Unit,
     onNavigateToRecoverPassword: () -> Unit,
     onNavigateToAdminHome: () -> Unit,
@@ -66,10 +70,14 @@ fun LoginScreen(
                 onForgotPassword = onNavigateToRecoverPassword,
                 onSignup = onNavigateToSignup,
                 onLogin = {
-                    if (email == "admin@eam.com" && password == "123456") {
-                        onNavigateToAdminHome()
-                    } else if (email == "customer@eam.com" && password == "123456") {
-                        onNavigateToCustomerHome()
+                    val user = usersViewModel.login(email, password)
+
+                    if (user != null) {
+                        if (user.role == Role.ADMIN) {
+                            onNavigateToAdminHome()
+                        } else {
+                            onNavigateToCustomerHome()
+                        }
                     } else {
                         Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
                     }

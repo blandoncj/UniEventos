@@ -16,12 +16,19 @@ import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
+import com.example.unieventos.viewmodel.CouponsViewModel
+import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
  * Navigation composable that handles the navigation between screens.
  */
 @Composable
-fun Navigation() {
+fun Navigation(
+    usersViewModel: UsersViewModel,
+    eventsViewModel: EventsViewModel,
+    couponsViewModel: CouponsViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -30,6 +37,7 @@ fun Navigation() {
     ) {
         composable<RouteScreen.Login> {
             LoginScreen(
+                usersViewModel = usersViewModel,
                 onNavigateToSignup = { navController.navigate(RouteScreen.Signup) },
                 onNavigateToRecoverPassword = { navController.navigate(RouteScreen.RecoverPassword) },
                 onNavigateToAdminHome = {
@@ -74,6 +82,8 @@ fun Navigation() {
 
         composable<RouteScreen.AdminHome> {
             HomeAdminScreen(
+                eventsViewModel = eventsViewModel,
+                couponsViewModel = couponsViewModel,
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(
@@ -98,6 +108,7 @@ fun Navigation() {
         composable<RouteScreen.EventDetail> {
             val eventId = it.toRoute<RouteScreen.EventDetail>()
             EventDetailScreen(
+                eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
                 onBack = { navController.popBackStack() }
             )
@@ -119,6 +130,7 @@ fun Navigation() {
 
         composable<RouteScreen.CustomerHome> {
             CustomerHomeScreen(
+                eventsViewModel = eventsViewModel,
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetail(eventId))
                 }
