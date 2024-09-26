@@ -16,6 +16,7 @@ import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 
@@ -25,7 +26,8 @@ import com.example.unieventos.viewmodel.UsersViewModel
 @Composable
 fun Navigation(
     usersViewModel: UsersViewModel,
-    eventsViewModel: EventsViewModel
+    eventsViewModel: EventsViewModel,
+    couponsViewModel: CouponsViewModel
 ) {
     val navController = rememberNavController()
 
@@ -81,6 +83,7 @@ fun Navigation(
         composable<RouteScreen.AdminHome> {
             HomeAdminScreen(
                 eventsViewModel = eventsViewModel,
+                couponsViewModel = couponsViewModel,
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(

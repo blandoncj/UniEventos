@@ -20,6 +20,7 @@ import dev.chrisbanes.haze.haze
  */
 @Composable
 fun CouponsScreen(
+    getCouponList: () -> List<Coupon>,
     paddingValues: PaddingValues,
     onNavigateToCouponDetail: (Int) -> Unit,
     hazeState: HazeState
@@ -39,41 +40,4 @@ fun CouponsScreen(
             )
         }
     }
-}
-
-private fun getCouponList(): List<Coupon> {
-    return listOf(
-        Coupon(
-            1,
-            "Cupón 1",
-            "2A1083AFK",
-            10,
-            "https://loremflickr.com/400/400/coupon",
-            "05-09-2024"
-        ),
-        Coupon(
-            2,
-            "Cupón 2",
-            "2A1083AFK",
-            10,
-            "https://loremflickr.com/400/400/football",
-            "05-09-2024"
-        ),
-        Coupon(
-            3,
-            "Cupón 3",
-            "2A1083AFK",
-            10,
-            "https://loremflickr.com/400/400/football",
-            "05-09-2024"
-        ),
-        Coupon(
-            4,
-            "Cupón 4",
-            "2A1083AFK",
-            10,
-            "https://loremflickr.com/400/400/football",
-            "05-09-2024"
-        ),
-    )
 }

@@ -11,6 +11,7 @@ import com.example.unieventos.R
 import com.example.unieventos.ui.components.admin.AdminBottomBar
 import com.example.unieventos.ui.components.utils.MainTopBar
 import com.example.unieventos.ui.components.utils.FloatingAddButton
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import dev.chrisbanes.haze.HazeState
 
@@ -21,6 +22,7 @@ import dev.chrisbanes.haze.HazeState
 @Composable
 fun HomeAdminScreen(
     eventsViewModel: EventsViewModel,
+    couponsViewModel: CouponsViewModel,
     onNavigateToEventDetail: (Int) -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit,
@@ -65,6 +67,7 @@ fun HomeAdminScreen(
             )
 
             1 -> CouponsScreen(
+                getCouponList = { couponsViewModel.coupons.value },
                 paddingValues = paddingValues,
                 onNavigateToCouponDetail = onNavigateToCouponDetail,
                 hazeState = hazeState
