@@ -18,6 +18,7 @@ import dev.chrisbanes.haze.HazeState
 fun CustomerHomeScreen(
     eventsViewModel: EventsViewModel,
     onNavigateToEventDetail: (Int) -> Unit,
+    onLogout: () -> Unit
 ) {
     val hazeState = remember { HazeState() }
 
@@ -31,7 +32,8 @@ fun CustomerHomeScreen(
                     1 -> stringResource(id = R.string.profile_lbl)
                     else -> stringResource(id = R.string.events_lbl)
                 },
-                hazeState = hazeState
+                hazeState = hazeState,
+                onLogout = onLogout
             )
         },
         bottomBar = {

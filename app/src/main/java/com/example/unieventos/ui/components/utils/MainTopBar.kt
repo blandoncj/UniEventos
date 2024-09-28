@@ -1,7 +1,12 @@
 package com.example.unieventos.ui.components.utils
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Logout
+import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -20,7 +25,8 @@ import dev.chrisbanes.haze.hazeChild
 @Composable
 fun MainTopBar(
     title: String,
-    hazeState: HazeState
+    hazeState: HazeState,
+    onLogout: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(Color.Transparent),
@@ -28,6 +34,16 @@ fun MainTopBar(
             .hazeChild(hazeState),
         title = {
             Text(text = title)
+        },
+        actions = {
+            IconButton(
+                onClick = { onLogout() }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.Logout,
+                    contentDescription = "Logout"
+                )
+            }
         }
     )
 }
