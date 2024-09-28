@@ -22,6 +22,7 @@ import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.Role
 import com.example.unieventos.ui.components.LoginForm
+import com.example.unieventos.utils.SharedPreferencesUtils
 import com.example.unieventos.utils.validateEmailFormat
 import com.example.unieventos.viewmodel.UsersViewModel
 
@@ -37,8 +38,7 @@ fun LoginScreen(
     usersViewModel: UsersViewModel,
     onNavigateToSignup: () -> Unit,
     onNavigateToRecoverPassword: () -> Unit,
-    onNavigateToAdminHome: () -> Unit,
-    onNavigateToCustomerHome: () -> Unit
+    onNavigateToHome: (Role) -> Unit,
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var emailError by rememberSaveable { mutableStateOf(EmailError.NONE) }
@@ -73,11 +73,8 @@ fun LoginScreen(
                     val user = usersViewModel.login(email, password)
 
                     if (user != null) {
-                        if (user.role == Role.ADMIN) {
-                            onNavigateToAdminHome()
-                        } else {
-                            onNavigateToCustomerHome()
-                        }
+                        SharedPreferencesUtils.savePreferences(context, user.id, user.role)
+                        onNavigateToHome(user.role)
                     } else {
                         Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
                     }

@@ -26,7 +26,8 @@ fun HomeAdminScreen(
     onNavigateToEventDetail: (Int) -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit,
-    onNavigateToCouponDetail: (Int) -> Unit
+    onNavigateToCouponDetail: (Int) -> Unit,
+    onLogout: () -> Unit
 ) {
     val hazeState = remember { HazeState() }
 
@@ -40,7 +41,8 @@ fun HomeAdminScreen(
                     1 -> stringResource(id = R.string.coupons_lbl)
                     else -> stringResource(id = R.string.events_lbl)
                 },
-                hazeState = hazeState
+                hazeState = hazeState,
+                onLogout = onLogout
             )
         },
         floatingActionButton = {
