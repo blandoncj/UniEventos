@@ -27,7 +27,7 @@ import com.example.unieventos.viewmodel.UsersViewModel
  * Navigation composable that handles the navigation between screens.
  */
 @Composable
-fun Navigation(
+fun  Navigation(
     usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel,
     couponsViewModel: CouponsViewModel
