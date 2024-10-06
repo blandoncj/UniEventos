@@ -43,7 +43,6 @@ class CouponsViewModel : ViewModel() {
                 "Cupón 1",
                 "2A1083AFK",
                 10,
-                "https://loremflickr.com/400/400/coupon",
                 "05-09-2024"
             ),
             Coupon(
@@ -51,7 +50,6 @@ class CouponsViewModel : ViewModel() {
                 "Cupón 2",
                 "2A1083AFK",
                 10,
-                "https://loremflickr.com/400/400/football",
                 "05-09-2024"
             ),
             Coupon(
@@ -59,7 +57,6 @@ class CouponsViewModel : ViewModel() {
                 "Cupón 3",
                 "2A1083AFK",
                 10,
-                "https://loremflickr.com/400/400/football",
                 "05-09-2024"
             ),
             Coupon(
@@ -67,7 +64,6 @@ class CouponsViewModel : ViewModel() {
                 "Cupón 4",
                 "2A1083AFK",
                 10,
-                "https://loremflickr.com/400/400/football",
                 "05-09-2024"
             ),
         )

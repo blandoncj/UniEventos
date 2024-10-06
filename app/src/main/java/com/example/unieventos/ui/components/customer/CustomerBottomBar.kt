@@ -8,42 +8,48 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.unieventos.R
+import com.example.unieventos.ui.components.customer.navigation.BottomNavItem
 
 /**
- * CustomerBottomBar composable that displays the bottom bar for the customer screens.
- * @param selectedTab The selected tab index.
- * @param onTabSelected The callback to handle the tab selection.
+ * Customer bottom bar.
+ * @param navController The navigation controller.
  */
 @Composable
 fun CustomerBottomBar(
-    selectedTab: Int,
-    onTabSelected: (Int) -> Unit
+    navController: NavHostController
 ) {
-    NavigationBar {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Stadium,
-                    contentDescription = "Events icon"
-                )
-            },
-            label = { Text(text = stringResource(id = R.string.events_lbl)) },
-            selected = selectedTab == 0,
-            onClick = { onTabSelected(0) }
-        )
 
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Events icon"
-                )
-            },
-            label = { Text(text = stringResource(id = R.string.profile_lbl)) },
-            selected = selectedTab == 1,
-            onClick = { onTabSelected(1) }
-        )
+    val tabs = listOf(
+        BottomNavItem.Events,
+        BottomNavItem.Profile
+    )
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    NavigationBar {
+        for (tab in tabs) {
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = "Events icon"
+                    )
+                },
+                label = { Text(stringResource(id = tab.label)) },
+                selected = navBackStackEntry?.destination?.hasRoute(tab.route::class)
+                    ?: false,
+                onClick = {
+                    navController.navigate(tab.route)
+                }
+            )
+        }
     }
+
 }

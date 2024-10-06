@@ -14,6 +14,5 @@ data class Coupon(
     val name: String,
     val code: String,
     val discount: Int,
-    val imageUrl: String,
     val expirationDate: String
 )

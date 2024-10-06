@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.admin
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,15 +16,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.unieventos.R
 import com.example.unieventos.ui.components.events.EventDetailItem
+import com.example.unieventos.ui.components.events.EventForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
+import com.example.unieventos.ui.components.utils.PrimaryButton
+import com.example.unieventos.ui.components.utils.SecondaryButton
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
@@ -33,7 +43,20 @@ fun EventDetailScreen(
     onBack: () -> Unit
 ) {
     val event = eventsViewModel.getEventById(eventId)
-    requireNotNull(event)
+
+    if (event == null) {
+        return
+    }
+
+    var name by rememberSaveable { mutableStateOf(event.name) }
+    var city by rememberSaveable { mutableStateOf(event.city) }
+    var expandedCity by rememberSaveable { mutableStateOf(false) }
+    var address by rememberSaveable { mutableStateOf(event.address) }
+    var description by rememberSaveable { mutableStateOf(event.description) }
+    var category by rememberSaveable { mutableStateOf(event.category) }
+    var expandedCategory by rememberSaveable { mutableStateOf(false) }
+    var date by rememberSaveable { mutableStateOf(event.date) }
+    var isDatePicked by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -44,38 +67,73 @@ fun EventDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .padding(horizontal = 30.dp),
         ) {
-            val model = ImageRequest.Builder(LocalContext.current)
-                .data(event.imageUrl)
-                .crossfade(true)
-                .build()
-
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                model = model,
-                contentDescription = "Event Image",
-                contentScale = ContentScale.Crop
+            EventForm(
+                name = name,
+                onNameChange = { name = it },
+                city = city,
+                onCitySelected = { city = it },
+                expandedCity = expandedCity,
+                onExpandedCityChange = { expandedCity = it },
+                address = address,
+                onAddressChange = { address = it },
+                description = description,
+                onDescriptionChange = { description = it },
+                category = category,
+                onCategorySelected = { category = it },
+                expandedCategory = expandedCategory,
+                onExpandedCategoryChange = { expandedCategory = it },
+                date = date,
+                onDateChange = { date = it },
+                isDatePicked = isDatePicked,
+                onDatePickedChange = { isDatePicked = it }
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                EventDetailItem(
-                    imageVector = Icons.Default.CalendarMonth,
-                    text = event.date
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                EventDetailItem(
-                    imageVector = Icons.Default.Place,
-                    text = event.city
+                PrimaryButton(
+                    text = stringResource(id = R.string.update_event_btn),
+                    enabled = name.isNotEmpty() &&
+                            city.isNotEmpty() &&
+                            address.isNotEmpty() &&
+                            description.isNotEmpty() &&
+                            category.isNotEmpty() &&
+                            date.isNotEmpty(),
+                    onClick = {
+                        val updatedEvent = event.copy(
+                            eventId,
+                            name = name,
+                            city = city,
+                            address = address,
+                            description = description,
+                            category = category,
+                            date = date
+                        )
+                        eventsViewModel.updateEvent(updatedEvent)
+                        onBack()
+                    },
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                SecondaryButton(
+                    text = stringResource(id = R.string.delete_event_btn),
+                    onClick = {
+                        eventsViewModel.deleteEvent(event)
+                        onBack()
+                    }
+                )
+            }
+
         }
     }
 }

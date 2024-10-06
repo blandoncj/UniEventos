@@ -2,6 +2,7 @@ package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.unieventos.enums.Role
+import com.example.unieventos.models.Customer
 import com.example.unieventos.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,13 +51,15 @@ class UsersViewModel : ViewModel() {
                 "admin@eam.com",
                 "123456"
             ),
-            User(
+            Customer(
+              "1092850716",
+                "Armenia",
+                "3226843150",
                 2,
                 "Jacobo",
-                Role.CUSTOMER,
                 "customer@eam.com",
                 "123456"
-            )
+            ),
         )
     }
 

@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.screens.customer
+    package com.example.unieventos.ui.screens.customer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

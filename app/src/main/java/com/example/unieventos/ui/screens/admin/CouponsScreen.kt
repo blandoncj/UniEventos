@@ -1,13 +1,15 @@
 package com.example.unieventos.ui.screens.admin
 
+import CouponCard
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.example.unieventos.models.Coupon
-import com.example.unieventos.ui.components.coupons.CouponCard
+import com.example.unieventos.viewmodel.CouponsViewModel
 import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
@@ -20,11 +22,14 @@ import dev.chrisbanes.haze.haze
  */
 @Composable
 fun CouponsScreen(
-    getCouponList: () -> List<Coupon>,
+    couponsViewModel: CouponsViewModel,
     paddingValues: PaddingValues,
     onNavigateToCouponDetail: (Int) -> Unit,
     hazeState: HazeState
 ) {
+
+    val coupons = couponsViewModel.coupons.collectAsState().value
+
     LazyColumn(
         modifier = Modifier
             .haze(
@@ -33,7 +38,7 @@ fun CouponsScreen(
             ),
         contentPadding = paddingValues
     ) {
-        items(getCouponList()) {
+        items(coupons) {
             CouponCard(
                 coupon = it,
                 onClick = { onNavigateToCouponDetail(it.id) }

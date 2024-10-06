@@ -5,9 +5,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.events.EventCard
+import com.example.unieventos.viewmodel.EventsViewModel
 import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
@@ -20,11 +22,14 @@ import dev.chrisbanes.haze.haze
  */
 @Composable
 fun EventsScreen(
-    getEventList: () -> List<Event>,
+    eventsViewModel: EventsViewModel,
     paddingValues: PaddingValues,
     onNavigateToEventDetail: (Int) -> Unit,
     hazeState: HazeState
 ) {
+
+    val events = eventsViewModel.events.collectAsState().value
+
     LazyColumn(
         modifier = Modifier
             .haze(
@@ -33,11 +38,12 @@ fun EventsScreen(
             ),
         contentPadding = paddingValues
     ) {
-        items(getEventList()) {
+        items(events) {
             EventCard(
                 event = it,
                 onClick = { onNavigateToEventDetail(it.id) }
             )
         }
     }
+
 }

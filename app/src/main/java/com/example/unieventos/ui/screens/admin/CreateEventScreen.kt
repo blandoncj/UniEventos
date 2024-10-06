@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.events.EventForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
+import com.example.unieventos.viewmodel.EventsViewModel
 
 /**
  * Create event screen composable function.
@@ -30,6 +32,7 @@ import com.example.unieventos.ui.components.utils.PrimaryButton
 @Composable
 fun CreateEventScreen(
     onBack: () -> Unit,
+    eventsViewModel: EventsViewModel
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var city by rememberSaveable { mutableStateOf("") }
@@ -40,6 +43,16 @@ fun CreateEventScreen(
     var expandedCategory by rememberSaveable { mutableStateOf(false) }
     var date by rememberSaveable { mutableStateOf("") }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
+
+    fun clearFields() {
+        name = ""
+        city = ""
+        address = ""
+        description = ""
+        category = ""
+        date = ""
+        isDatePicked = false
+    }
 
     Scaffold(
         topBar = {
@@ -91,8 +104,23 @@ fun CreateEventScreen(
                         category.isNotEmpty() &&
                         date.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { onBack() }
+                onClick = {
+                    val event = Event(
+                        0,
+                        name,
+                        city,
+                        address,
+                        description,
+                        date,
+                        category,
+                        "https://loremflickr.com/400/400/football?random"
+                    )
+                    eventsViewModel.createEvent(event)
+//                    onBack()
+                    clearFields()
+                }
             )
         }
     }
 }
+

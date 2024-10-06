@@ -21,28 +21,40 @@ class EventsViewModel : ViewModel() {
                 1,
                 "Evento 1",
                 "Armenia",
+                "Calle 6",
+                "Partido de Futbol",
                 "2021-10-10",
+                "Deportes",
                 "https://loremflickr.com/400/400/football?random"
             ),
             Event(
                 2,
                 "Evento 2",
-                "Pereira",
+                "Armenia",
+                "Calle 6",
+                "Partido de Futbol",
                 "2021-10-10",
+                "Deportes",
                 "https://loremflickr.com/400/400/football?random"
             ),
             Event(
                 3,
                 "Evento 3",
-                "Manizales",
+                "Pereira",
+                "Calle 6",
+                "Partido de Futbol",
                 "2021-10-10",
+                "Deportes",
                 "https://loremflickr.com/400/400/football?random"
             ),
             Event(
                 4,
                 "Evento 4",
                 "Medellín",
+                "Calle 6",
+                "Partido de Futbol",
                 "2021-10-10",
+                "Deportes",
                 "https://loremflickr.com/400/400/football?random"
             ),
         )

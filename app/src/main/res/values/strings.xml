@@ -20,6 +20,7 @@
     <string name="events_lbl">Eventos</string>
     <string name="coupons_lbl">Cupones</string>
     <string name="profile_lbl">Perfil</string>
+    <string name="exp_lbl">Válido hasta</string>
 
     <!-- text for placeholders -->
     <string name="cit_ph">Seleccione una ciudad</string>
@@ -60,7 +61,11 @@
     <string name="resend_code_btn">Reenviar Código</string>
     <string name="cancel_btn">Cancelar</string>
     <string name="create_coupon_btn">Crear Cupón</string>
+    <string name="update_coupon_btn">Actualizar Cupón</string>
+    <string name="delete_coupon_btn">Eliminar Cupón</string>
     <string name="create_event_btn">Crear Evento</string>
+    <string name="update_event_btn">Actualizar Evento</string>
+    <string name="delete_event_btn">Eliminar Evento</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>

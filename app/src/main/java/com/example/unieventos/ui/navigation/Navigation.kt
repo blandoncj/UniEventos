@@ -19,18 +19,18 @@ import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
 import com.example.unieventos.utils.SharedPreferencesUtils
+import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 
-/**
- * Navigation composable that handles the navigation between screens.
- */
+
 @Composable
-fun  Navigation(
+fun Navigation(
     usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel,
-    couponsViewModel: CouponsViewModel
+    couponsViewModel: CouponsViewModel,
+    cartViewModel: CartViewModel
 ) {
     val context = LocalContext.current
     val navController = rememberNavController()
@@ -100,6 +100,8 @@ fun  Navigation(
             HomeAdminScreen(
                 eventsViewModel = eventsViewModel,
                 couponsViewModel = couponsViewModel,
+                usersViewModel = usersViewModel,
+                userId = session?.id ?: 0,
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(
@@ -120,13 +122,14 @@ fun  Navigation(
                         }
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
 
         composable<RouteScreen.CreateEvent> {
             CreateEventScreen(
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                eventsViewModel = eventsViewModel
             )
         }
 
@@ -148,6 +151,7 @@ fun  Navigation(
         composable<RouteScreen.CouponDetail> {
             val couponId = it.toRoute<RouteScreen.CouponDetail>()
             CouponDetailScreen(
+                couponsViewModel = couponsViewModel,
                 couponId = couponId.couponId,
                 onBack = { navController.popBackStack() }
             )

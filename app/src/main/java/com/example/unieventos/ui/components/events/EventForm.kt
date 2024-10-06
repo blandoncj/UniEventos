@@ -114,5 +114,9 @@ fun EventForm(
             onDatePickedChange = onDatePickedChange,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        LocalityField()
     }
 }

@@ -1,79 +1,99 @@
-package com.example.unieventos.ui.components.coupons
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import androidx.compose.ui.unit.sp
+import com.example.unieventos.R
 import com.example.unieventos.models.Coupon
 
 /**
- * CouponCard is a composable that represents a card with a coupon image, name, code, discount, and expiration date.
- * @param coupon: Coupon object that contains the coupon information.ç
- * @param onClick: Function that will be called when the card is clicked.
+ * Coupon card component
+ * @param coupon: Coupon
+ * @param onClick: Function to navigate to the coupon detail screen
  */
 @Composable
 fun CouponCard(
     coupon: Coupon,
     onClick: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
+
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
-            .padding(horizontal = 8.dp),
-        elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF6F1F8)),
-        onClick = onClick
+            .padding(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        shape = RoundedCornerShape(16.dp),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val model = ImageRequest.Builder(LocalContext.current)
-                .data(coupon.imageUrl)
-                .crossfade(true)
-                .build()
 
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp),
-                model = model,
-                contentDescription = "Coupon image",
-                contentScale = ContentScale.Crop
+            Text(
+                text = coupon.name,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                ),
+                modifier = Modifier.padding(8.dp)
             )
 
+
+            HorizontalDivider(
+                color = Color.Black,
+                thickness = 1.dp,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+
+
             Column(
-                modifier = Modifier.fillMaxWidth()
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(12.dp)
             ) {
+
                 Text(
-                    text = coupon.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                    text = "${stringResource(id = R.string.cod_lbl)}: ${coupon.code}",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = coupon.code)
-                Text(text = coupon.discount.toString() + "%")
-                Text(text = "Válido hasta " + coupon.expirationDate)
+
+                Text(
+                    text = "${stringResource(id = R.string.disc_lbl)}: ${coupon.discount}%",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1E88E5)
+                    )
+                )
+
+                Text(
+                    text = "${stringResource(id = R.string.exp_lbl)}: ${coupon.expirationDate}",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
+                )
             }
         }
     }
+
 }

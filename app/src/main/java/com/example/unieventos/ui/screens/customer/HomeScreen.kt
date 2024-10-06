@@ -1,14 +1,18 @@
 package com.example.unieventos.ui.screens.customer
 
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
 import com.example.unieventos.ui.components.customer.CustomerBottomBar
+import com.example.unieventos.ui.components.customer.navigation.NavHostCustomer
 import com.example.unieventos.ui.components.utils.MainTopBar
 import com.example.unieventos.ui.screens.admin.EventsScreen
 import com.example.unieventos.viewmodel.EventsViewModel
@@ -21,7 +25,8 @@ fun CustomerHomeScreen(
     onLogout: () -> Unit
 ) {
     val hazeState = remember { HazeState() }
-
+    val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -38,22 +43,21 @@ fun CustomerHomeScreen(
         },
         bottomBar = {
             CustomerBottomBar(
-                selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                navController = navController,
             )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) { paddingValues ->
-        when (selectedTab) {
-            0 -> EventsScreen(
-                getEventList = { eventsViewModel.events.value },
-                paddingValues = paddingValues,
-                hazeState = hazeState,
-                onNavigateToEventDetail = onNavigateToEventDetail
-            )
-            1 -> ProfileScreen(
-                paddingValues = paddingValues,
-                hazeState = hazeState
-            )
-        }
+
+        NavHostCustomer(
+            navController = navController,
+            paddingValues = paddingValues,
+            eventsViewModel = eventsViewModel,
+            onNavigateToEventDetail = onNavigateToEventDetail,
+            hazeState = hazeState
+        )
+
     }
 }
