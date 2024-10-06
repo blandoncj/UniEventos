@@ -1,4 +1,4 @@
-    package com.example.unieventos.ui.screens.customer
+package com.example.unieventos.ui.screens.customer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +25,7 @@ import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
+import com.example.unieventos.models.Customer
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.customer.CustomerForm
 import com.example.unieventos.ui.components.utils.PrimaryButton
@@ -35,14 +36,18 @@ import com.example.unieventos.utils.validateName
 import com.example.unieventos.utils.validatePasswordFormat
 import com.example.unieventos.utils.validatePasswordsMatch
 import com.example.unieventos.utils.validatePhone
+import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
- * SignupScreen composable is a screen that displays the signup form.
- * @param onBack The callback to navigate back.
- * @param onNavigateToConfirmAccount The callback to navigate to the confirm account screen.
+ * Signup screen composable function.
+ *
+ * @param usersViewModel ViewModel that contains the users data.
+ * @param onBack Function that navigates back.
+ * @param onNavigateToConfirmAccount Function that navigates to the confirm account screen.
  */
 @Composable
 fun SignupScreen(
+    usersViewModel: UsersViewModel,
     onBack: () -> Unit,
     onNavigateToConfirmAccount: () -> Unit
 ) {
@@ -83,19 +88,19 @@ fun SignupScreen(
                 cedula = cedula,
                 onCedulaChange = {
                     cedula = it
-                    cedulaError = validateCedula(it)
+                    cedulaError = usersViewModel.validateCedula(it)
                 },
                 cedulaError = cedulaError,
                 name = name,
                 onNameChange = {
                     name = it
-                    nameError = validateName(it)
+                    nameError = usersViewModel.validateName(it)
                 },
                 nameError = nameError,
                 phone = phone,
                 onPhoneChange = {
                     phone = it
-                    phoneError = validatePhone(it)
+                    phoneError = usersViewModel.validatePhone(it)
                 },
                 phoneError = phoneError,
                 city = city,
@@ -105,19 +110,19 @@ fun SignupScreen(
                 email = email,
                 onEmailChange = {
                     email = it
-                    emailError = validateEmail(it)
+                    emailError = usersViewModel.validateEmail(it)
                 },
                 emailError = emailError,
                 password = password,
                 onPasswordChange = {
                     password = it
-                    passwordError = validatePasswordFormat(it)
+                    passwordError = usersViewModel.validatePasswordFormat(it)
                 },
                 passwordError = passwordError,
                 confirmPassword = confirmPassword,
                 onConfirmPasswordChange = {
                     confirmPassword = it
-                    confirmPasswordError = validatePasswordsMatch(password, it)
+                    confirmPasswordError = usersViewModel.validatePasswordsMatch(password, it)
                 },
                 confirmPasswordError = confirmPasswordError
             )
@@ -126,14 +131,37 @@ fun SignupScreen(
 
             PrimaryButton(
                 text = stringResource(id = R.string.register_btn),
+                modifier = Modifier.fillMaxWidth(),
                 enabled = cedulaError == CedulaError.NONE &&
                         nameError == NameError.NONE &&
                         phoneError == PhoneError.NONE &&
                         emailError == EmailError.NONE &&
                         passwordError == PasswordError.NONE &&
-                        confirmPasswordError == PasswordError.NONE &&
-                        validateFields(listOf(cedula, name, phone, email, password, confirmPassword)),
-                onClick = onNavigateToConfirmAccount
+                        confirmPasswordError == PasswordError.NONE,
+                onClick = {
+//                    onNavigateToConfirmAccount()
+                    if (cedulaError == CedulaError.NONE &&
+                        nameError == NameError.NONE &&
+                        phoneError == PhoneError.NONE &&
+                        emailError == EmailError.NONE &&
+                        passwordError == PasswordError.NONE &&
+                        confirmPasswordError == PasswordError.NONE
+                    ) {
+
+                        val customer = Customer(
+                            id = 0,
+                            cedula = cedula,
+                            name = name,
+                            phone = phone,
+                            city = city,
+                            email = email,
+                            password = password
+                        )
+
+                        usersViewModel.createUser(customer)
+                        onNavigateToConfirmAccount()
+                    }
+                }
             )
         }
     }

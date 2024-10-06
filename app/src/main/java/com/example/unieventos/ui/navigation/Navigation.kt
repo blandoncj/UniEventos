@@ -72,6 +72,7 @@ fun Navigation(
 
         composable<RouteScreen.Signup> {
             SignupScreen(
+                usersViewModel = usersViewModel,
                 onBack = { navController.navigate(RouteScreen.Login) },
                 onNavigateToConfirmAccount = { navController.navigate(RouteScreen.ConfirmAccount) }
             )

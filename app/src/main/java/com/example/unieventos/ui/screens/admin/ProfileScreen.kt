@@ -23,6 +23,7 @@ import com.example.unieventos.R
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
+import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.EmailField
 import com.example.unieventos.ui.components.PasswordField
 import com.example.unieventos.ui.components.customer.NameField
@@ -68,7 +69,10 @@ fun ProfileScreen(
 
         NameField(
             name = name,
-            onNameChange = { name = it },
+            onNameChange = {
+                name = it
+                nameError = usersViewModel.validateName(name)
+            },
             nameError = nameError,
             modifier = Modifier.fillMaxWidth()
         )
@@ -77,7 +81,12 @@ fun ProfileScreen(
 
         EmailField(
             email = email,
-            onEmailChange = { email = it },
+            onEmailChange = {
+                email = it
+                if (email != user.email) {
+                    emailError = usersViewModel.validateEmail(email)
+                }
+            },
             emailError = emailError,
             modifier = Modifier.fillMaxWidth()
         )
@@ -86,7 +95,10 @@ fun ProfileScreen(
 
         PasswordField(
             password = password,
-            onPasswordChange = { password = it },
+            onPasswordChange = {
+                password = it
+                passwordError = usersViewModel.validatePasswordFormat(password)
+            },
             passwordError = passwordError,
             modifier = Modifier.fillMaxWidth()
         )
@@ -96,24 +108,31 @@ fun ProfileScreen(
         PasswordField(
             label = stringResource(id = R.string.pass_confirm_lbl),
             password = confirmPassword,
-            onPasswordChange = { confirmPassword = it },
+            onPasswordChange = {
+                confirmPassword = it
+                confirmPasswordError =
+                    usersViewModel.validatePasswordsMatch(password, confirmPassword)
+            },
             passwordError = confirmPasswordError,
             modifier = Modifier.fillMaxWidth()
         )
 
-//        PrimaryButton(
-//            text = stringResource(id = R.string.save_lbl),
-//            onClick = {
-//                nameError = usersViewModel.validateName(name)
-//                emailError = usersViewModel.validateEmail(email)
-//                passwordError = usersViewModel.validatePasswordFormat(password)
-//                confirmPasswordError = usersViewModel.validatePasswordMatch(password, confirmPassword)
-//
-//                if (nameError == NameError.NONE && emailError == EmailError.NONE && passwordError == PasswordError.NONE && confirmPasswordError == PasswordError.NONE) {
-//                    usersViewModel.updateUser(userId, name, email, password)
-//                }
-//            },
-//            modifier = Modifier.align(Alignment.End)
-//        )
+        PrimaryButton(
+            text = stringResource(id = R.string.update_account_btn),
+            enabled = nameError == NameError.NONE && emailError == EmailError.NONE && passwordError == PasswordError.NONE && confirmPasswordError == PasswordError.NONE,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                if (nameError == NameError.NONE && emailError == EmailError.NONE && passwordError == PasswordError.NONE && confirmPasswordError == PasswordError.NONE) {
+                    val updatedUser = User(
+                        id = userId,
+                        role = user.role,
+                        name = name,
+                        email = email,
+                        password = password
+                    )
+                    usersViewModel.updateUser(updatedUser)
+                }
+            }
+        )
     }
 }
