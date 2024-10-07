@@ -19,7 +19,7 @@ import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.ui.components.utils.AppLogo
 import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.ui.components.utils.SecondaryButton
-import com.example.unieventos.utils.validateFields
+import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
  * LoginForm composable is a reusable component that displays the login form.
@@ -43,7 +43,8 @@ fun LoginForm(
     onPasswordChange: (String) -> Unit,
     onForgotPassword: () -> Unit,
     onLogin: () -> Unit,
-    onSignup: () -> Unit
+    onSignup: () -> Unit,
+    usersViewModel: UsersViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,7 +88,7 @@ fun LoginForm(
 
         PrimaryButton(
             text = stringResource(id = R.string.login_btn),
-            enabled = emailError == EmailError.NONE && passwordError == PasswordError.NONE && validateFields(
+            enabled = emailError == EmailError.NONE && passwordError == PasswordError.NONE && usersViewModel.validateFields(
                 listOf(email, password)
             ),
             modifier = Modifier

@@ -20,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.CouponCodeError
 import com.example.unieventos.enums.CouponNameError
+import com.example.unieventos.enums.DateError
+import com.example.unieventos.models.Coupon
 import com.example.unieventos.ui.components.coupons.CouponForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
+import com.example.unieventos.viewmodel.CouponsViewModel
 
 /**
  * Create coupon screen composable function.
@@ -31,6 +34,7 @@ import com.example.unieventos.ui.components.utils.PrimaryButton
  */
 @Composable
 fun CreateCouponScreen(
+    couponsViewModel: CouponsViewModel,
     onBack: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
@@ -41,6 +45,15 @@ fun CreateCouponScreen(
     var expandedDiscount by rememberSaveable { mutableStateOf(false) }
     var expirationDate by rememberSaveable { mutableStateOf("") }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
+    var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
+
+    fun clearFields() {
+        name = ""
+        code = ""
+        discount = ""
+        expirationDate = ""
+        isDatePicked = false
+    }
 
     Scaffold(
         topBar = {
@@ -62,10 +75,16 @@ fun CreateCouponScreen(
 
             CouponForm(
                 name = name,
-                onNameChange = { name = it },
+                onNameChange = {
+                    name = it
+                    nameError = couponsViewModel.validateName(name)
+                },
                 nameError = nameError,
                 code = code,
-                onCodeChange = { code = it },
+                onCodeChange = {
+                    code = it
+                    codeError = couponsViewModel.validateCode(code)
+                },
                 codeError = codeError,
                 discount = discount,
                 expandedDiscount = expandedDiscount,
@@ -74,7 +93,11 @@ fun CreateCouponScreen(
                 expirationDate = expirationDate,
                 onExpirationDateChange = { expirationDate = it },
                 isDatePicked = isDatePicked,
-                onDatePickedChange = { isDatePicked = it },
+                onDatePickedChange = {
+                    isDatePicked = it
+                    dateError = couponsViewModel.validateDate(expirationDate)
+                },
+                dateError = dateError
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -83,10 +106,23 @@ fun CreateCouponScreen(
                 text = stringResource(id = R.string.create_coupon_btn),
                 enabled = nameError == CouponNameError.NONE &&
                         codeError == CouponCodeError.NONE &&
+                        dateError == DateError.NONE &&
                         discount.isNotEmpty() &&
                         expirationDate.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { onBack() }
+                onClick = {
+
+                    val coupon = Coupon(
+                        id = 0,
+                        name = name,
+                        code = code,
+                        discount = discount.toInt(),
+                        expirationDate = expirationDate
+                    )
+
+                    couponsViewModel.createCoupon(coupon)
+                    clearFields()
+                }
             )
         }
     }

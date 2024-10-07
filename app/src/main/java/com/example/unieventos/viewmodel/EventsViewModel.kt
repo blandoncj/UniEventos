@@ -1,10 +1,13 @@
 package com.example.unieventos.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.models.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.LocalDate
 
 class EventsViewModel : ViewModel() {
 
@@ -83,6 +86,21 @@ class EventsViewModel : ViewModel() {
 
     fun deleteEvent(event: Event) {
         _events.value -= event
+    }
+
+
+    @SuppressLint("NewApi")
+    fun validateDate(date: String): DateError {
+        return try {
+            val expirationDate = LocalDate.parse(date)
+            if (expirationDate.isBefore(LocalDate.now())) {
+                DateError.INVALID
+            } else {
+                DateError.NONE
+            }
+        } catch (e: Exception) {
+            DateError.NONE
+        }
     }
 
 }

@@ -24,6 +24,7 @@ import com.example.unieventos.ui.components.admin.navigation.ItemTabAdmin
 @Composable
 fun AdminBottomBar(
     navController: NavHostController,
+    onTabSelected: (Int) -> Unit
 ) {
 
     val tabs = listOf(
@@ -35,7 +36,7 @@ fun AdminBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     NavigationBar {
-        for (tab in tabs) {
+        tabs.forEachIndexed { index, tab ->
             NavigationBarItem(
                 icon = {
                     Icon(
@@ -47,6 +48,7 @@ fun AdminBottomBar(
                 selected = navBackStackEntry?.destination?.hasRoute(tab.route::class)
                     ?: false,
                 onClick = {
+                    onTabSelected(index)
                     navController.navigate(tab.route)
                 }
             )

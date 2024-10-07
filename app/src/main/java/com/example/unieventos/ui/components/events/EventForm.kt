@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.CityField
 import com.example.unieventos.ui.components.utils.DateField
 
@@ -53,6 +54,7 @@ fun EventForm(
     onDateChange: (String) -> Unit,
     isDatePicked: Boolean,
     onDatePickedChange: (Boolean) -> Unit,
+    dateError: DateError
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -112,7 +114,8 @@ fun EventForm(
             onDateChange = onDateChange,
             isDatePicked = isDatePicked,
             onDatePickedChange = onDatePickedChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            dateError = dateError
         )
 
         Spacer(modifier = Modifier.height(10.dp))

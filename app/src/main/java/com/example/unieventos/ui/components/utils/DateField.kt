@@ -13,8 +13,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
+import com.example.unieventos.enums.DateError
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,7 +28,8 @@ fun DateField(
     onDateChange: (String) -> Unit,
     isDatePicked: Boolean,
     onDatePickedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    dateError: DateError,
+    modifier: Modifier = Modifier,
 ) {
     val datePickerState = rememberDatePickerState()
 
@@ -36,6 +39,22 @@ fun DateField(
         readOnly = true,
         label = { Text(text = stringResource(id = R.string.date_lbl)) },
         placeholder = { Text(text = stringResource(id = R.string.date_ph)) },
+        isError = dateError != DateError.NONE,
+        supportingText = {
+            when (dateError) {
+                DateError.EMPTY -> Text(
+                    text = stringResource(id = R.string.empty_field),
+                    color = Color.Red
+                )
+
+                DateError.INVALID -> Text(
+                    text = stringResource(id = R.string.invalid_date_err),
+                    color = Color.Red
+                )
+
+                DateError.NONE -> {}
+            }
+        },
         trailingIcon = {
             IconButton(
                 onClick = { onDatePickedChange(true) }

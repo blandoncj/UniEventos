@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.enums.CouponCodeError
 import com.example.unieventos.enums.CouponNameError
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.utils.DateField
 
 @Composable
@@ -29,6 +30,7 @@ fun CouponForm(
     onExpirationDateChange: (String) -> Unit,
     isDatePicked: Boolean,
     onDatePickedChange: (Boolean) -> Unit,
+    dateError: DateError
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,7 +75,8 @@ fun CouponForm(
             isDatePicked = isDatePicked,
             onDatePickedChange = onDatePickedChange,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            dateError = dateError
         )
     }
 }

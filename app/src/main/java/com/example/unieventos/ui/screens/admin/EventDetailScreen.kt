@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.events.EventDetailItem
 import com.example.unieventos.ui.components.events.EventForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
@@ -57,6 +58,7 @@ fun EventDetailScreen(
     var expandedCategory by rememberSaveable { mutableStateOf(false) }
     var date by rememberSaveable { mutableStateOf(event.date) }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
+    var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
 
     Scaffold(
         topBar = {
@@ -87,7 +89,11 @@ fun EventDetailScreen(
                 date = date,
                 onDateChange = { date = it },
                 isDatePicked = isDatePicked,
-                onDatePickedChange = { isDatePicked = it }
+                onDatePickedChange = {
+                    isDatePicked = it
+                    dateError = eventsViewModel.validateDate(date)
+                },
+                dateError = dateError
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -133,7 +139,6 @@ fun EventDetailScreen(
                     }
                 )
             }
-
         }
     }
 }

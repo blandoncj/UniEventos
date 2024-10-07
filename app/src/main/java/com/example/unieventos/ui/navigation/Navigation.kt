@@ -23,6 +23,7 @@ import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
+import okhttp3.Route
 
 
 @Composable
@@ -139,12 +140,13 @@ fun Navigation(
             EventDetailScreen(
                 eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.navigate(RouteScreen.AdminHome) }
             )
         }
 
         composable<RouteScreen.CreateCoupon> {
             CreateCouponScreen(
+                couponsViewModel = couponsViewModel,
                 onBack = { navController.popBackStack() }
             )
         }
@@ -154,7 +156,7 @@ fun Navigation(
             CouponDetailScreen(
                 couponsViewModel = couponsViewModel,
                 couponId = couponId.couponId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.navigate(RouteScreen.AdminHome) }
             )
         }
 

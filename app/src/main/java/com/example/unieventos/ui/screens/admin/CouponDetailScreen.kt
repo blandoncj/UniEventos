@@ -27,6 +27,7 @@ import coil.request.ImageRequest
 import com.example.unieventos.R
 import com.example.unieventos.enums.CouponCodeError
 import com.example.unieventos.enums.CouponNameError
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.coupons.CouponForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
@@ -53,6 +54,7 @@ fun CouponDetailScreen(
     var expandedDiscount by rememberSaveable { mutableStateOf(false) }
     var expirationDate by rememberSaveable { mutableStateOf(coupon.expirationDate) }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
+    var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
 
     Scaffold(
         topBar = {
@@ -71,10 +73,20 @@ fun CouponDetailScreen(
 
             CouponForm(
                 name = name,
-                onNameChange = { name = it },
+                onNameChange = {
+                    name = it
+                    if (name != coupon.name) {
+                        nameError = couponsViewModel.validateName(name)
+                    }
+                },
                 nameError = nameError,
                 code = code,
-                onCodeChange = { code = it },
+                onCodeChange = {
+                    code = it
+                    if (code != coupon.code) {
+                        codeError = couponsViewModel.validateCode(code)
+                    }
+                },
                 codeError = codeError,
                 discount = discount,
                 expandedDiscount = expandedDiscount,
@@ -83,7 +95,11 @@ fun CouponDetailScreen(
                 expirationDate = expirationDate,
                 onExpirationDateChange = { expirationDate = it },
                 isDatePicked = isDatePicked,
-                onDatePickedChange = { isDatePicked = it },
+                onDatePickedChange = {
+                    isDatePicked = it
+                    dateError = couponsViewModel.validateDate(expirationDate)
+                },
+                dateError = dateError
             )
 
             Spacer(modifier = Modifier.height(30.dp))

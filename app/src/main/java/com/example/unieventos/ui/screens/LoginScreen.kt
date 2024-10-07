@@ -23,7 +23,6 @@ import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.Role
 import com.example.unieventos.ui.components.LoginForm
 import com.example.unieventos.utils.SharedPreferencesUtils
-import com.example.unieventos.utils.validateEmailFormat
 import com.example.unieventos.viewmodel.UsersViewModel
 
 /**
@@ -61,7 +60,7 @@ fun LoginScreen(
                 email = email,
                 onEmailChange = {
                     email = it
-                    emailError = validateEmailFormat(it)
+                    emailError = usersViewModel.validateEmailFormat(it)
                 },
                 emailError = emailError,
                 password = password,
@@ -78,7 +77,8 @@ fun LoginScreen(
                     } else {
                         Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
                     }
-                }
+                },
+                usersViewModel = usersViewModel
             )
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
 import com.example.unieventos.ui.components.admin.AdminBottomBar
@@ -43,6 +44,7 @@ fun HomeAdminScreen(
                 when (selectedTab) {
                     0 -> stringResource(id = R.string.events_lbl)
                     1 -> stringResource(id = R.string.coupons_lbl)
+                    2 -> stringResource(id = R.string.profile_lbl)
                     else -> stringResource(id = R.string.events_lbl)
                 },
                 hazeState = hazeState,
@@ -50,16 +52,20 @@ fun HomeAdminScreen(
             )
         },
         floatingActionButton = {
-            FloatingAddButton(onClick = {
-                when (selectedTab) {
-                    0 -> onNavigateToCreateEvent()
-                    1 -> onNavigateToCreateCoupon()
-                }
-            })
+            if (selectedTab == 0 || selectedTab == 1) {
+                FloatingAddButton(onClick = {
+
+                    when (selectedTab) {
+                        0 -> onNavigateToCreateEvent()
+                        1 -> onNavigateToCreateCoupon()
+                    }
+                })
+            }
         },
         bottomBar = {
             AdminBottomBar(
                 navController = navController,
+                onTabSelected = { selectedTab = it }
             )
         },
         snackbarHost = {
@@ -78,6 +84,5 @@ fun HomeAdminScreen(
             usersViewModel = usersViewModel,
             userId = userId,
         )
-
     }
 }

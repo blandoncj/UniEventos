@@ -43,11 +43,12 @@
     <string name="cod_found_err">Código inválido, verifique que sea correcto.</string>
     <string name="evt_desc_length">Descripción inválida, debe contener al menos 10 caracteres.</string>
     <string name="evt_date_err">Fecha inválida, debe posterior a la actual.</string>
-    <string name="cpn_cod_length_err">Código inválido, debe contener 8 carácteres.</string>
+    <string name="cpn_cod_length_err">Código inválido, debe contener 6 carácteres.</string>
     <string name="cpn_cod_exists_err">Código inválido, ya se encuentra en uso.</string>
     <string name="ema_format_err">Correo Electrónico inválido.</string>
     <string name="ema_exists_err">Correo Electrónico inválido, ya existe una cuenta con este.</string>
     <string name="invalid_credentials">Usuario o contraesña incorrectos</string>
+    <string name="invalid_date_err">Fecha inválida, debe ser después de la actual.</string>
 
     <!--    text for the buttons-->
     <string name="login_btn">Iniciar Sesión</string>

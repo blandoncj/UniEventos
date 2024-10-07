@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.enums.DateError
 import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.events.EventForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
@@ -43,6 +44,7 @@ fun CreateEventScreen(
     var expandedCategory by rememberSaveable { mutableStateOf(false) }
     var date by rememberSaveable { mutableStateOf("") }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
+    var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
 
     fun clearFields() {
         name = ""
@@ -90,7 +92,11 @@ fun CreateEventScreen(
                 date = date,
                 onDateChange = { date = it },
                 isDatePicked = isDatePicked,
-                onDatePickedChange = { isDatePicked = it }
+                onDatePickedChange = {
+                    isDatePicked = it
+                    dateError = eventsViewModel.validateDate(date)
+                },
+                dateError = dateError
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -116,7 +122,6 @@ fun CreateEventScreen(
                         "https://loremflickr.com/400/400/football?random"
                     )
                     eventsViewModel.createEvent(event)
-//                    onBack()
                     clearFields()
                 }
             )
