@@ -17,10 +17,6 @@ import com.example.unieventos.R
 import com.example.unieventos.ui.components.admin.navigation.BottomNavItem
 import com.example.unieventos.ui.components.admin.navigation.ItemTabAdmin
 
-/**
- * Admin bottom bar.
- * @param navController The navigation controller.
- */
 @Composable
 fun AdminBottomBar(
     navController: NavHostController,
@@ -54,5 +50,4 @@ fun AdminBottomBar(
             )
         }
     }
-
 }

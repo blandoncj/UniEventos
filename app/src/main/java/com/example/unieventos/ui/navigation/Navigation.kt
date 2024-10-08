@@ -11,10 +11,11 @@ import com.example.unieventos.ui.screens.LoginScreen
 import com.example.unieventos.ui.screens.admin.CouponDetailScreen
 import com.example.unieventos.ui.screens.admin.CreateCouponScreen
 import com.example.unieventos.ui.screens.admin.CreateEventScreen
-import com.example.unieventos.ui.screens.admin.EventDetailScreen
-import com.example.unieventos.ui.screens.admin.HomeAdminScreen
+import com.example.unieventos.ui.screens.admin.AdminEventDetailScreen
+import com.example.unieventos.ui.screens.admin.AdminHomeScreen
 import com.example.unieventos.ui.screens.customer.ChangePasswordScreen
 import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
+import com.example.unieventos.ui.screens.customer.CustomerEventDetailScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
@@ -23,7 +24,6 @@ import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
-import okhttp3.Route
 
 
 @Composable
@@ -99,7 +99,7 @@ fun Navigation(
         }
 
         composable<RouteScreen.AdminHome> {
-            HomeAdminScreen(
+            AdminHomeScreen(
                 eventsViewModel = eventsViewModel,
                 couponsViewModel = couponsViewModel,
                 usersViewModel = usersViewModel,
@@ -107,7 +107,7 @@ fun Navigation(
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(
-                        RouteScreen.EventDetail(
+                        RouteScreen.AdminEventDetail(
                             eventId
                         )
                     )
@@ -135,9 +135,9 @@ fun Navigation(
             )
         }
 
-        composable<RouteScreen.EventDetail> {
-            val eventId = it.toRoute<RouteScreen.EventDetail>()
-            EventDetailScreen(
+        composable<RouteScreen.AdminEventDetail> {
+            val eventId = it.toRoute<RouteScreen.AdminEventDetail>()
+            AdminEventDetailScreen(
                 eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
                 onBack = { navController.navigate(RouteScreen.AdminHome) }
@@ -164,7 +164,7 @@ fun Navigation(
             CustomerHomeScreen(
                 eventsViewModel = eventsViewModel,
                 onNavigateToEventDetail = { eventId ->
-                    navController.navigate(RouteScreen.EventDetail(eventId))
+                    navController.navigate(RouteScreen.CustomerEventDetail(eventId))
                 },
                 onLogout = {
                     SharedPreferencesUtils.clearPreferences(context)
@@ -175,6 +175,15 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+
+        composable<RouteScreen.CustomerEventDetail> {
+            val eventId = it.toRoute<RouteScreen.AdminEventDetail>()
+            CustomerEventDetailScreen(
+                eventsViewModel = eventsViewModel,
+                eventId = eventId.eventId,
+                onBack = { navController.navigate(RouteScreen.CustomerHome) }
             )
         }
     }

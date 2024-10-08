@@ -5,39 +5,42 @@ import kotlinx.serialization.Serializable
 sealed class RouteScreen {
 
     @Serializable
-    data object Login: RouteScreen()
+    data object Login : RouteScreen()
 
     @Serializable
-    data object Signup: RouteScreen()
+    data object Signup : RouteScreen()
 
     @Serializable
-    data object ConfirmAccount: RouteScreen()
+    data object ConfirmAccount : RouteScreen()
 
     @Serializable
-    data object  RecoverPassword: RouteScreen()
+    data object RecoverPassword : RouteScreen()
 
     @Serializable
-    data object  ChangePassword: RouteScreen()
+    data object ChangePassword : RouteScreen()
 
     @Serializable
-    data object AdminHome: RouteScreen()
+    data object AdminHome : RouteScreen()
 
     @Serializable
-    data object CreateEvent: RouteScreen()
+    data object CreateEvent : RouteScreen()
 
     @Serializable
-    data class EventDetail(val eventId: Int): RouteScreen()
+    data class AdminEventDetail(val eventId: Int) : RouteScreen()
 
     @Serializable
-    data object Coupons: RouteScreen()
+    data object Coupons : RouteScreen()
 
     @Serializable
-    data object CreateCoupon: RouteScreen()
+    data object CreateCoupon : RouteScreen()
 
     @Serializable
-    data class CouponDetail(val couponId: Int): RouteScreen()
+    data class CouponDetail(val couponId: Int) : RouteScreen()
 
     @Serializable
-    data object CustomerHome: RouteScreen()
+    data object CustomerHome : RouteScreen()
+
+    @Serializable
+    data class CustomerEventDetail(val eventId: Int) : RouteScreen()
 
 }

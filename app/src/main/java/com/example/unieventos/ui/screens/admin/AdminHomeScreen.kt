@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.screens.customer
+package com.example.unieventos.ui.screens.admin
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -11,17 +11,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
-import com.example.unieventos.ui.components.customer.CustomerBottomBar
-import com.example.unieventos.ui.components.customer.navigation.NavHostCustomer
+import com.example.unieventos.ui.components.admin.AdminBottomBar
+import com.example.unieventos.ui.components.admin.navigation.NavHostAdmin
 import com.example.unieventos.ui.components.utils.MainTopBar
-import com.example.unieventos.ui.screens.admin.EventsScreen
+import com.example.unieventos.ui.components.utils.FloatingAddButton
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 import dev.chrisbanes.haze.HazeState
 
 @Composable
-fun CustomerHomeScreen(
+fun AdminHomeScreen(
     eventsViewModel: EventsViewModel,
+    couponsViewModel: CouponsViewModel,
+    usersViewModel: UsersViewModel,
+    userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToCreateEvent: () -> Unit,
+    onNavigateToCreateCoupon: () -> Unit,
+    onNavigateToCouponDetail: (Int) -> Unit,
     onLogout: () -> Unit
 ) {
     val hazeState = remember { HazeState() }
@@ -34,16 +42,29 @@ fun CustomerHomeScreen(
             MainTopBar(
                 when (selectedTab) {
                     0 -> stringResource(id = R.string.events_lbl)
-                    1 -> stringResource(id = R.string.profile_lbl)
+                    1 -> stringResource(id = R.string.coupons_lbl)
+                    2 -> stringResource(id = R.string.profile_lbl)
                     else -> stringResource(id = R.string.events_lbl)
                 },
                 hazeState = hazeState,
                 onLogout = onLogout
             )
         },
+        floatingActionButton = {
+            if (selectedTab == 0 || selectedTab == 1) {
+                FloatingAddButton(onClick = {
+
+                    when (selectedTab) {
+                        0 -> onNavigateToCreateEvent()
+                        1 -> onNavigateToCreateCoupon()
+                    }
+                })
+            }
+        },
         bottomBar = {
-            CustomerBottomBar(
+            AdminBottomBar(
                 navController = navController,
+                onTabSelected = { selectedTab = it }
             )
         },
         snackbarHost = {
@@ -51,13 +72,16 @@ fun CustomerHomeScreen(
         }
     ) { paddingValues ->
 
-        NavHostCustomer(
+        NavHostAdmin(
             navController = navController,
             paddingValues = paddingValues,
+            couponsViewModel = couponsViewModel,
             eventsViewModel = eventsViewModel,
             onNavigateToEventDetail = onNavigateToEventDetail,
-            hazeState = hazeState
+            onNavigateToCouponDetail = onNavigateToCouponDetail,
+            hazeState = hazeState,
+            usersViewModel = usersViewModel,
+            userId = userId,
         )
-
     }
 }

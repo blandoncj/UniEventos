@@ -68,6 +68,15 @@
     <string name="update_event_btn">Actualizar Evento</string>
     <string name="delete_event_btn">Eliminar Evento</string>
 
+    <!-- text for alert dialogs -->
+    <string name="dismiss_btn">Cancelar</string>
+    <string name="delete_coupon_title">Eliminar Cupón</string>
+    <string name="delete_coupon_msg">¿Estás seguro que deseas eliminar este cupón?</string>
+    <string name="coupon_deleted">Cupón eliminado correctamente</string>
+    <string name="delete_event_title">Eliminar Evento</string>
+    <string name="delete_event_msg">¿Estás seguro que deseas eliminar este evento?</string>
+    <string name="event_deleted">Evento eliminado correctamente</string>
+
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>
     <string name="recover_password">Introduce tú correo electrónico para que podamos enviarte un código de recuperación</string>

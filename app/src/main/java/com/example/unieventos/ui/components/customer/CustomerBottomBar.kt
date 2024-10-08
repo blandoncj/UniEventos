@@ -17,13 +17,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.unieventos.R
 import com.example.unieventos.ui.components.customer.navigation.BottomNavItem
 
-/**
- * Customer bottom bar.
- * @param navController The navigation controller.
- */
 @Composable
 fun CustomerBottomBar(
-    navController: NavHostController
+    navController: NavHostController,
+    onTabSelected: (Int) -> Unit
 ) {
 
     val tabs = listOf(
@@ -34,22 +31,22 @@ fun CustomerBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     NavigationBar {
-        for (tab in tabs) {
+        tabs.forEachIndexed { index, tab ->
             NavigationBarItem(
                 icon = {
                     Icon(
                         imageVector = tab.icon,
-                        contentDescription = "Events icon"
+                        contentDescription = null
                     )
                 },
                 label = { Text(stringResource(id = tab.label)) },
                 selected = navBackStackEntry?.destination?.hasRoute(tab.route::class)
                     ?: false,
                 onClick = {
+                    onTabSelected(index)
                     navController.navigate(tab.route)
                 }
             )
         }
     }
-
 }

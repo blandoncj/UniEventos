@@ -101,8 +101,6 @@ class CouponsViewModel : ViewModel() {
         }
     }
 
-
-
     @SuppressLint("NewApi")
     fun validateDate(date: String): DateError {
         return try {
