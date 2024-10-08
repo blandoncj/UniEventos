@@ -1,21 +1,17 @@
 package com.example.unieventos.ui.screens.admin
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +23,6 @@ import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.EmailField
 import com.example.unieventos.ui.components.PasswordField
 import com.example.unieventos.ui.components.customer.NameField
-import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.viewmodel.UsersViewModel
 import dev.chrisbanes.haze.HazeDefaults
@@ -35,7 +30,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 
 @Composable
-fun ProfileScreen(
+fun AdminProfileScreen(
     usersViewModel: UsersViewModel,
     userId: Int,
     hazeState: HazeState,

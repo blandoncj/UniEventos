@@ -15,11 +15,14 @@ import com.example.unieventos.ui.components.customer.CustomerBottomBar
 import com.example.unieventos.ui.components.customer.navigation.NavHostCustomer
 import com.example.unieventos.ui.components.utils.MainTopBar
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 import dev.chrisbanes.haze.HazeState
 
 @Composable
 fun CustomerHomeScreen(
     eventsViewModel: EventsViewModel,
+    usersViewModel: UsersViewModel,
+    userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
     onLogout: () -> Unit
 ) {
@@ -55,8 +58,11 @@ fun CustomerHomeScreen(
             navController = navController,
             paddingValues = paddingValues,
             eventsViewModel = eventsViewModel,
+            usersViewModel = usersViewModel,
+            userId = userId,
             onNavigateToEventDetail = onNavigateToEventDetail,
-            hazeState = hazeState
+            hazeState = hazeState,
+            onLogout = onLogout
         )
 
     }

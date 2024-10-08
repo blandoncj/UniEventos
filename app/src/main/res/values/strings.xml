@@ -47,7 +47,7 @@
     <string name="cpn_cod_exists_err">Código inválido, ya se encuentra en uso.</string>
     <string name="ema_format_err">Correo Electrónico inválido.</string>
     <string name="ema_exists_err">Correo Electrónico inválido, ya existe una cuenta con este.</string>
-    <string name="invalid_credentials">Usuario o contraesña incorrectos</string>
+    <string name="invalid_credentials">Correo o contraseña incorrecta</string>
     <string name="invalid_date_err">Fecha inválida, debe ser después de la actual.</string>
 
     <!--    text for the buttons-->
@@ -76,6 +76,10 @@
     <string name="delete_event_title">Eliminar Evento</string>
     <string name="delete_event_msg">¿Estás seguro que deseas eliminar este evento?</string>
     <string name="event_deleted">Evento eliminado correctamente</string>
+    <string name="delete_account_title">Eliminar Cuenta</string>
+    <string name="delete_account_msg">¿Estás seguro que deseas eliminar tu cuenta?</string>
+    <string name="account_deleted">Cuenta eliminada correctamente</string>
+    <string name="account_updated">Cuenta actualizada correctamente</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>

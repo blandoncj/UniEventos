@@ -8,8 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.unieventos.ui.screens.admin.EventsScreen
-import com.example.unieventos.ui.screens.customer.ProfileScreen
+import com.example.unieventos.ui.screens.customer.CustomerProfileScreen
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 import dev.chrisbanes.haze.HazeState
 
 @Composable
@@ -17,8 +18,11 @@ fun NavHostCustomer(
     navController: NavHostController,
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
+    usersViewModel: UsersViewModel,
+    userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
-    hazeState: HazeState
+    hazeState: HazeState,
+    onLogout: () -> Unit
 ) {
 
     NavHost(
@@ -36,9 +40,12 @@ fun NavHostCustomer(
         }
 
         composable<ItemTabCustomer.ProfileTab> {
-            ProfileScreen(
+            CustomerProfileScreen(
                 paddingValues = paddingValues,
-                hazeState = hazeState
+                hazeState = hazeState,
+                usersViewModel = usersViewModel,
+                userId = userId,
+                onLogout = onLogout
             )
         }
     }

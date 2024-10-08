@@ -163,6 +163,8 @@ fun Navigation(
         composable<RouteScreen.CustomerHome> {
             CustomerHomeScreen(
                 eventsViewModel = eventsViewModel,
+                usersViewModel = usersViewModel,
+                userId = session?.id ?: 0,
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.CustomerEventDetail(eventId))
                 },

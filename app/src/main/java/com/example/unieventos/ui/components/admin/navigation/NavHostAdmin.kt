@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.unieventos.ui.screens.admin.CouponsScreen
 import com.example.unieventos.ui.screens.admin.EventsScreen
-import com.example.unieventos.ui.screens.admin.ProfileScreen
+import com.example.unieventos.ui.screens.admin.AdminProfileScreen
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
@@ -52,7 +51,7 @@ fun NavHostAdmin(
         }
 
         composable<ItemTabAdmin.ProfileTab> {
-            ProfileScreen(
+            AdminProfileScreen(
                 usersViewModel = usersViewModel,
                 userId = userId,
                 hazeState = hazeState,
