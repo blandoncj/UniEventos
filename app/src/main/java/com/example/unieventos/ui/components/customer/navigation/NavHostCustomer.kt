@@ -7,8 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.unieventos.ui.screens.admin.EventsScreen
+import com.example.unieventos.ui.screens.CouponsScreen
+import com.example.unieventos.ui.screens.EventsScreen
+import com.example.unieventos.ui.screens.customer.CartScreen
 import com.example.unieventos.ui.screens.customer.CustomerProfileScreen
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 import dev.chrisbanes.haze.HazeState
@@ -19,6 +22,7 @@ fun NavHostCustomer(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
+    couponsViewModel: CouponsViewModel,
     userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
     hazeState: HazeState,
@@ -37,6 +41,19 @@ fun NavHostCustomer(
                 onNavigateToEventDetail = onNavigateToEventDetail,
                 hazeState = hazeState
             )
+        }
+
+        composable<ItemTabCustomer.CouponsTab> {
+            CouponsScreen(
+                couponsViewModel = couponsViewModel,
+                paddingValues = paddingValues,
+                onNavigateToCouponDetail = {},
+                hazeState = hazeState
+            )
+        }
+
+        composable<ItemTabCustomer.CartTab> {
+            CartScreen()
         }
 
         composable<ItemTabCustomer.ProfileTab> {

@@ -43,4 +43,7 @@ sealed class RouteScreen {
     @Serializable
     data class CustomerEventDetail(val eventId: Int) : RouteScreen()
 
+    @Serializable
+    data object Cart : RouteScreen()
+
 }

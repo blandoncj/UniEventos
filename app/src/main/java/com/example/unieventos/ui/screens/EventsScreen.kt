@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.screens.admin
+package com.example.unieventos.ui.screens
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,7 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.events.EventCard
 import com.example.unieventos.viewmodel.EventsViewModel
 import dev.chrisbanes.haze.HazeDefaults

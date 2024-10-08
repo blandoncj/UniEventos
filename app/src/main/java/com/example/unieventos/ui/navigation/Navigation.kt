@@ -13,11 +13,12 @@ import com.example.unieventos.ui.screens.admin.CreateCouponScreen
 import com.example.unieventos.ui.screens.admin.CreateEventScreen
 import com.example.unieventos.ui.screens.admin.AdminEventDetailScreen
 import com.example.unieventos.ui.screens.admin.AdminHomeScreen
-import com.example.unieventos.ui.screens.customer.ChangePasswordScreen
+import com.example.unieventos.ui.screens.ChangePasswordScreen
 import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
 import com.example.unieventos.ui.screens.customer.CustomerEventDetailScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
-import com.example.unieventos.ui.screens.customer.RecoverPasswordScreen
+import com.example.unieventos.ui.screens.RecoverPasswordScreen
+import com.example.unieventos.ui.screens.customer.CartScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
 import com.example.unieventos.utils.SharedPreferencesUtils
 import com.example.unieventos.viewmodel.CartViewModel
@@ -147,7 +148,7 @@ fun Navigation(
         composable<RouteScreen.CreateCoupon> {
             CreateCouponScreen(
                 couponsViewModel = couponsViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.navigate(RouteScreen.AdminHome) }
             )
         }
 
@@ -164,6 +165,7 @@ fun Navigation(
             CustomerHomeScreen(
                 eventsViewModel = eventsViewModel,
                 usersViewModel = usersViewModel,
+                couponsViewModel = couponsViewModel,
                 userId = session?.id ?: 0,
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.CustomerEventDetail(eventId))
@@ -186,6 +188,11 @@ fun Navigation(
                 eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
                 onBack = { navController.navigate(RouteScreen.CustomerHome) }
+            )
+        }
+
+        composable<RouteScreen.Cart> {
+            CartScreen(
             )
         }
     }

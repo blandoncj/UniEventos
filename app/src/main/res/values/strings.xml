@@ -21,6 +21,7 @@
     <string name="coupons_lbl">Cupones</string>
     <string name="profile_lbl">Perfil</string>
     <string name="exp_lbl">Válido hasta</string>
+    <string name="cart_lbl">Carrito</string>
 
     <!-- text for placeholders -->
     <string name="cit_ph">Seleccione una ciudad</string>

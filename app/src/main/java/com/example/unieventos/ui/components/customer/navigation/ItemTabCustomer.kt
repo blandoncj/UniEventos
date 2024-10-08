@@ -11,6 +11,9 @@ sealed class ItemTabCustomer {
     data object CouponsTab : ItemTabCustomer()
 
     @Serializable
+    data object CartTab : ItemTabCustomer()
+
+    @Serializable
     data object ProfileTab : ItemTabCustomer()
 
 }

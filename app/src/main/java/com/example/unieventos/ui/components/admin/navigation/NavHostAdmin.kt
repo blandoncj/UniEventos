@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.unieventos.ui.screens.admin.CouponsScreen
-import com.example.unieventos.ui.screens.admin.EventsScreen
+import com.example.unieventos.ui.screens.CouponsScreen
+import com.example.unieventos.ui.screens.EventsScreen
 import com.example.unieventos.ui.screens.admin.AdminProfileScreen
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
