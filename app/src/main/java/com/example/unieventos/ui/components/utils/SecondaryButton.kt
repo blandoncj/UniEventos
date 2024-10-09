@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.utils
 
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton

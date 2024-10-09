@@ -19,4 +19,25 @@ sealed class RouteScreen {
     @Serializable
     data object  ChangePassword: RouteScreen()
 
+    @Serializable
+    data object AdminHome: RouteScreen()
+
+    @Serializable
+    data object CreateEvent: RouteScreen()
+
+    @Serializable
+    data class EventDetail(val eventId: Int): RouteScreen()
+
+    @Serializable
+    data object Coupons: RouteScreen()
+
+    @Serializable
+    data object CreateCoupon: RouteScreen()
+
+    @Serializable
+    data class CouponDetail(val couponId: Int): RouteScreen()
+
+    @Serializable
+    data object CustomerHome: RouteScreen()
+
 }

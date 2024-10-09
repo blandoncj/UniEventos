@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.CodeError
 import com.example.unieventos.enums.PasswordError
-import com.example.unieventos.ui.components.BackButton
 import com.example.unieventos.ui.components.CodeField
+import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.PasswordField
-import com.example.unieventos.ui.components.PrimaryButton
+import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.utils.validateCode
 import com.example.unieventos.utils.validatePasswordFormat
 import com.example.unieventos.utils.validatePasswordsMatch
@@ -34,7 +34,7 @@ import com.example.unieventos.utils.validatePasswordsMatch
  */
 @Composable
 fun ChangePasswordScreen(
-    onNavigateToRecoverPassword: () -> Unit
+    onBack: () -> Unit
 ) {
     var code by rememberSaveable { mutableStateOf("") }
     var codeError by rememberSaveable { mutableStateOf(CodeError.NONE) }
@@ -43,15 +43,11 @@ fun ChangePasswordScreen(
     var confirmPassword by rememberSaveable { mutableStateOf("") }
     var confirmPasswordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
 
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            BackButton(onClick = { onNavigateToRecoverPassword() })
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(title = "Cambiar Contraseña", onBack = onBack )
         }
+    ) { padding ->
 
         Column(
             modifier = Modifier
@@ -99,7 +95,7 @@ fun ChangePasswordScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 PasswordField(
-                    label = stringResource(id = R.string.password_confirm_lbl),
+                    label = stringResource(id = R.string.pass_confirm_lbl),
                     password = confirmPassword,
                     onPasswordChange = {
                         confirmPassword = it

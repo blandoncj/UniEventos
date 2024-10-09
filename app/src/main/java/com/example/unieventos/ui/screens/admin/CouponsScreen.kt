@@ -1,66 +1,48 @@
 package com.example.unieventos.ui.screens.admin
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
+import CouponCard
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.unieventos.ui.components.CouponList
+import com.example.unieventos.models.Coupon
+import com.example.unieventos.viewmodel.CouponsViewModel
+import dev.chrisbanes.haze.HazeDefaults
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.haze
 
+/**
+ * Coupon list component
+ * @param paddingValues: Padding values
+ * @param onNavigateToCouponDetail: Function to navigate to the coupon detail screen
+ * @param hazeState: Haze state
+ */
 @Composable
-fun CouponsScreen() {
+fun CouponsScreen(
+    couponsViewModel: CouponsViewModel,
+    paddingValues: PaddingValues,
+    onNavigateToCouponDetail: (Int) -> Unit,
+    hazeState: HazeState
+) {
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { },
-                containerColor = Color(0xFFF1E6F9)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "add",
-                    modifier = Modifier.size(35.dp),
-                    tint = Color.Black
-                )
-            }
-        }
-    ) { padding ->
+    val coupons = couponsViewModel.coupons.collectAsState().value
 
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "Cupones Disponibles",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
-                ),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 10.dp)
+    LazyColumn(
+        modifier = Modifier
+            .haze(
+                state = hazeState,
+                style = HazeDefaults.style(backgroundColor = MaterialTheme.colorScheme.surface)
+            ),
+        contentPadding = paddingValues
+    ) {
+        items(coupons) {
+            CouponCard(
+                coupon = it,
+                onClick = { onNavigateToCouponDetail(it.id) }
             )
-
-            CouponList()
         }
     }
 }

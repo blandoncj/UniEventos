@@ -14,32 +14,26 @@ import com.example.unieventos.R
 /**
  * A city field that shows a list of cities in a dropdown menu.
  * @param city The selected city.
- * @param modifier The modifier to be applied to the city field.
+ * @param onCitySelected The callback to select a city.
  * @param expanded The state of the dropdown menu.
  * @param onExpandedChange The callback to change the state of the dropdown menu.
- * @param onCitySelected The callback to select a city.
+ * @param modifier The modifier to be applied to the city field.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityField(
     city: String,
-    modifier: Modifier = Modifier,
+    onCitySelected: (String) -> Unit,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
-    onCitySelected: (String) -> Unit
+    modifier: Modifier = Modifier,
 ) {
     val cities =
         listOf(
-            "Armenia", "Bogotá", "Cali",
-            "Medellín", "Pereira", "Manizales",
-            "Cartagena", "Barranquilla", "Santa Marta",
-            "Cúcuta", "Villavicencio", "Ibagué",
-            "Neiva", "Pasto", "Popayán",
-            "Tunja", "Riohacha", "Quibdó",
-            "Montería", "Sincelejo", "Valledupar",
-            "Arauca", "Yopal", "Mocoa",
-            "Puerto Carreño", "San José del Guaviare", "Mitú",
-            "Leticia"
+            "Armenia",
+            "Pereira",
+            "Manizales",
+            "Medellín"
         )
 
     ExposedDropdownMenuBox(
@@ -51,8 +45,8 @@ fun CityField(
             onValueChange = { },
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            label = { Text(text = stringResource(id = R.string.city_lbl)) },
-            placeholder = { Text(text = stringResource(id = R.string.city_placeholder)) },
+            label = { Text(text = stringResource(id = R.string.cit_lbl)) },
+            placeholder = { Text(text = stringResource(id = R.string.cit_ph)) },
             modifier = Modifier
                 .menuAnchor()
                 .then(modifier)

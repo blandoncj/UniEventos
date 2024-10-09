@@ -28,7 +28,7 @@ fun CodeField(
     OutlinedTextField(
         value = code,
         onValueChange = onCodeChange,
-        label = { Text(text = stringResource(id = R.string.code_lbl)) },
+        label = { Text(text = stringResource(id = R.string.cod_lbl)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         isError = codeError != CodeError.NONE,
@@ -40,12 +40,12 @@ fun CodeField(
                 )
 
                 CodeError.INVALID_LENGTH -> Text(
-                    text = stringResource(id = R.string.code_length),
+                    text = stringResource(id = R.string.cod_length_err),
                     color = Color.Red
                 )
 
                 CodeError.NOT_FOUND -> Text(
-                    text = stringResource(id = R.string.code_not_found),
+                    text = stringResource(id = R.string.cod_found_err),
                     color = Color.Red
                 )
 

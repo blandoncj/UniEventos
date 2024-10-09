@@ -20,10 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.CodeError
-import com.example.unieventos.ui.components.BackButton
 import com.example.unieventos.ui.components.CodeField
-import com.example.unieventos.ui.components.PrimaryButton
-import com.example.unieventos.ui.components.SecondaryButton
+import com.example.unieventos.ui.components.utils.CustomTopAppBar
+import com.example.unieventos.ui.components.utils.PrimaryButton
+import com.example.unieventos.ui.components.utils.SecondaryButton
 import com.example.unieventos.utils.validateCode
 
 /**
@@ -37,16 +37,11 @@ fun ConfirmAccountScreen(
     var code by rememberSaveable { mutableStateOf("") }
     var codeError by rememberSaveable { mutableStateOf(CodeError.NONE) }
 
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            BackButton(onClick = { onBack() })
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(title = "Confirmar Cuenta", onBack = onBack)
         }
-
+    ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)

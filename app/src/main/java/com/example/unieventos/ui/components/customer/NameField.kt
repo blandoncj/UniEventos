@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.customer
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -28,7 +28,7 @@ fun NameField(
     OutlinedTextField(
         value = name,
         onValueChange = onNameChange,
-        label = { Text(text = stringResource(id = R.string.name_lbl)) },
+        label = { Text(text = stringResource(id = R.string.nam_lbl)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
         isError = nameError != NameError.NONE,
@@ -40,12 +40,12 @@ fun NameField(
                 )
 
                 NameError.INVALID_LENGTH -> Text(
-                    text = stringResource(id = R.string.name_length),
+                    text = stringResource(id = R.string.nam_length_err),
                     color = Color.Red
                 )
 
                 NameError.INVALID_FORMAT -> Text(
-                    text = stringResource(id = R.string.name_format),
+                    text = stringResource(id = R.string.nam_format_err),
                     color = Color.Red
                 )
 

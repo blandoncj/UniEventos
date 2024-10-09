@@ -32,7 +32,7 @@ import com.example.unieventos.enums.PasswordError
  */
 @Composable
 fun PasswordField(
-    label: String = stringResource(id = R.string.password_lbl),
+    label: String = stringResource(id = R.string.pass_lbl),
     password: String,
     onPasswordChange: (String) -> Unit,
     passwordError: PasswordError,
@@ -62,12 +62,12 @@ fun PasswordField(
                 )
 
                 PasswordError.INVALID_LENGTH -> Text(
-                    text = stringResource(id = R.string.password_length),
+                    text = stringResource(id = R.string.pass_length_err),
                     color = Color.Red
                 )
 
                 PasswordError.INCORRECT -> Text(
-                    text = stringResource(id = R.string.passwords_dont_match),
+                    text = stringResource(id = R.string.pass_match_err),
                     color = Color.Red
                 )
 

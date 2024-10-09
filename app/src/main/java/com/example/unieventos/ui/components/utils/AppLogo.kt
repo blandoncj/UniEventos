@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.utils
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.components
+package com.example.unieventos.ui.components.customer
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -28,7 +28,7 @@ fun CedulaField(
     OutlinedTextField(
         value = cedula,
         onValueChange = onCedulaChange,
-        label = { Text(text = stringResource(id = R.string.cedula_lbl)) },
+        label = { Text(text = stringResource(id = R.string.ced_lbl)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         isError = cedulaError != CedulaError.NONE,
@@ -40,12 +40,12 @@ fun CedulaField(
                 )
 
                 CedulaError.INVALID_LENGTH -> Text(
-                    text = stringResource(id = R.string.cedula_length),
+                    text = stringResource(id = R.string.ced_length_err),
                     color = Color.Red
                 )
 
                 CedulaError.ALREADY_REGISTERED -> Text(
-                    text = stringResource(id = R.string.cedula_already_exists),
+                    text = stringResource(id = R.string.ced_exists_err),
                     color = Color.Red
                 )
 

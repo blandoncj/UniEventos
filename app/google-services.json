@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "805994620209",
+    "project_id": "unieventos-93233",
+    "storage_bucket": "unieventos-93233.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805994620209:android:efdb631924a54a39617c10",
+        "android_client_info": {
+          "package_name": "com.example.unieventos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6WnGh5pqW-Ld5c7DDD2pH1QJbmPOB1ms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
