@@ -1,5 +1,8 @@
 package com.example.unieventos.ui.screens.admin
 
+import ImagePicker
+import LocalityField
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +28,6 @@ import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.viewmodel.EventsViewModel
 
-/**
- * Create event screen composable function.
- * This composable function displays the create event screen.
- * @param onBack The function that is called when the user presses the back button.
- */
 @Composable
 fun CreateEventScreen(
     onBack: () -> Unit,
@@ -46,6 +44,9 @@ fun CreateEventScreen(
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
     var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
 
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    var locationsList by rememberSaveable { mutableStateOf(mutableListOf<Triple<String, String, String>>()) }
+
     fun clearFields() {
         name = ""
         city = ""
@@ -54,6 +55,8 @@ fun CreateEventScreen(
         category = ""
         date = ""
         isDatePicked = false
+        imageUri = null
+        locationsList.clear()
     }
 
     Scaffold(
@@ -99,8 +102,6 @@ fun CreateEventScreen(
                 dateError = dateError
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
-
             PrimaryButton(
                 text = stringResource(id = R.string.create_event_btn),
                 enabled = name.isNotEmpty() &&
@@ -108,18 +109,21 @@ fun CreateEventScreen(
                         address.isNotEmpty() &&
                         description.isNotEmpty() &&
                         category.isNotEmpty() &&
-                        date.isNotEmpty(),
+                        date.isNotEmpty() &&
+                        imageUri != null &&
+                        locationsList.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     val event = Event(
-                        0,
-                        name,
-                        city,
-                        address,
-                        description,
-                        date,
-                        category,
-                        "https://loremflickr.com/400/400/football?random"
+                        id = 0,
+                        name = name,
+                        city = city,
+                        address = address,
+                        description = description,
+                        date = date,
+                        category = category,
+                        imageUrl = imageUri.toString(),
+                        locations = locationsList
                     )
                     eventsViewModel.createEvent(event)
                     clearFields()
@@ -128,4 +132,3 @@ fun CreateEventScreen(
         }
     }
 }
-

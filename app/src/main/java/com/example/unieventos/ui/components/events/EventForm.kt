@@ -1,5 +1,8 @@
 package com.example.unieventos.ui.components.events
 
+import ImagePicker
+import LocalityField
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,23 +25,6 @@ import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.CityField
 import com.example.unieventos.ui.components.utils.DateField
 
-/**
- * A composable that displays a form for the user to input their event information.
- * @param name The name that the user has input.
- * @param onNameChange A lambda that is called when the user changes the name.
- * @param city The city that the user has selected.
- * @param onCitySelected A lambda that is called when the user selects a city.
- * @param expandedCity The state of the city field.
- * @param onExpandedCityChange A lambda that is called when the user expands the city field.
- * @param address The address that the user has input.
- * @param onAddressChange A lambda that is called when the user changes the address.
- * @param description The description that the user has input.
- * @param onDescriptionChange A lambda that is called when the user changes the description.
- * @param date The date that the user has input.
- * @param onDateChange A lambda that is called when the user changes the date.
- * @param isDatePicked The state of the date field.
- * @param onDatePickedChange A lambda that is called when the user picks a date.
- */
 @Composable
 fun EventForm(
     name: String,
@@ -56,6 +47,9 @@ fun EventForm(
     onDatePickedChange: (Boolean) -> Unit,
     dateError: DateError
 ) {
+
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -116,6 +110,22 @@ fun EventForm(
             onDatePickedChange = onDatePickedChange,
             modifier = Modifier.fillMaxWidth(),
             dateError = dateError
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        ImagePicker(
+            label = "Imagen poster",
+            imageUri = imageUri,
+            onImagePicked = { imageUri = it }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        ImagePicker(
+            label = "Imagen localidades",
+            imageUri = imageUri,
+            onImagePicked = { imageUri = it }
         )
 
         Spacer(modifier = Modifier.height(10.dp))

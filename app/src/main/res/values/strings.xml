@@ -21,6 +21,9 @@
     <string name="coupons_lbl">Cupones</string>
     <string name="profile_lbl">Perfil</string>
     <string name="exp_lbl">Válido hasta</string>
+    <string name="locality">Localidad</string>
+    <string name="capacity">Aforo</string>
+    <string name="price">Precio</string>
     <string name="cart_lbl">Carrito</string>
 
     <!-- text for placeholders -->
@@ -48,7 +51,7 @@
     <string name="cpn_cod_exists_err">Código inválido, ya se encuentra en uso.</string>
     <string name="ema_format_err">Correo Electrónico inválido.</string>
     <string name="ema_exists_err">Correo Electrónico inválido, ya existe una cuenta con este.</string>
-    <string name="invalid_credentials">Correo o contraseña incorrecta</string>
+    <string name="invalid_credentials">Usuario o contraesña incorrectos</string>
     <string name="invalid_date_err">Fecha inválida, debe ser después de la actual.</string>
 
     <!--    text for the buttons-->
@@ -69,18 +72,18 @@
     <string name="update_event_btn">Actualizar Evento</string>
     <string name="delete_event_btn">Eliminar Evento</string>
 
-    <!-- text for alert dialogs -->
-    <string name="dismiss_btn">Cancelar</string>
-    <string name="delete_coupon_title">Eliminar Cupón</string>
-    <string name="delete_coupon_msg">¿Estás seguro que deseas eliminar este cupón?</string>
-    <string name="coupon_deleted">Cupón eliminado correctamente</string>
+    <!-- text for alert dialogs and notifications -->
+    <string name="event_deleted">Evento eliminado exitosamente</string>
     <string name="delete_event_title">Eliminar Evento</string>
-    <string name="delete_event_msg">¿Estás seguro que deseas eliminar este evento?</string>
-    <string name="event_deleted">Evento eliminado correctamente</string>
+    <string name="delete_event_msg">¿Estás seguro de eliminar este evento?</string>
+    <string name="coupon_deleted">Cupón eliminado exitosamente</string>
+    <string name="delete_coupon_title">Eliminar Cupón</string>
+    <string name="delete_coupon_msg">¿Estás seguro de eliminar este cupón?</string>
+    <string name="dismiss_btn">Cancelar</string>
+    <string name="account_updated">Cuenta actualizada exitosamente</string>
+    <string name="account_deleted">Cuenta eliminada exitosamente</string>
     <string name="delete_account_title">Eliminar Cuenta</string>
-    <string name="delete_account_msg">¿Estás seguro que deseas eliminar tu cuenta?</string>
-    <string name="account_deleted">Cuenta eliminada correctamente</string>
-    <string name="account_updated">Cuenta actualizada correctamente</string>
+    <string name="delete_account_msg">¿Estás seguro de eliminar tu cuenta?</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>

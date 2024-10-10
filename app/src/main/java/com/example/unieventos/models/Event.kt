@@ -9,5 +9,5 @@ data class Event(
     val date: String,
     val category: String,
     val imageUrl: String,
-//    val localities: List<Locality>
+    val locations: List<Any>
 )
