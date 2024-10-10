@@ -9,41 +9,31 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.unieventos.models.Locality
 
 @Composable
-fun LocalityField() {
-    // Lista que contiene las localidades, aforos y precios
-    var locationsList by rememberSaveable { mutableStateOf(mutableListOf<Triple<String, String, String>>()) }
-
-    var locality by rememberSaveable { mutableStateOf("") }
+fun LocalityField(
+    localities: MutableList<Locality>,
+    onLocalitiesChange: (MutableList<Locality>) -> Unit
+) {
+    var localityName by rememberSaveable { mutableStateOf("") }
     var capacity by rememberSaveable { mutableStateOf("") }
     var price by rememberSaveable { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        locationsList.forEach { location ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-            ) {
-                Text(text = "Localidad: ${location.first}, Aforo: ${location.second}, Precio: ${location.third}")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         ) {
             OutlinedTextField(
-                value = locality,
-                onValueChange = { locality = it },
+                value = localityName,
+                onValueChange = { localityName = it },
                 label = { Text(text = "Localidad") },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.dp),
+                singleLine = true
             )
         }
 
@@ -57,7 +47,8 @@ fun LocalityField() {
                 label = { Text(text = "Aforo") },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.dp),
+                singleLine = true
             )
 
             OutlinedTextField(
@@ -66,24 +57,31 @@ fun LocalityField() {
                 label = { Text(text = "Precio") },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.dp),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             IconButton(
                 onClick = {
-                    if (locality.isNotEmpty() && capacity.isNotEmpty() && price.isNotEmpty()) {
-                        locationsList.add(Triple(locality, capacity, price))
+                    if (localityName.isNotEmpty() && capacity.isNotEmpty() && price.isNotEmpty()) {
+                        val newLocality = Locality(
+                            id = localities.size,
+                            name = localityName,
+                            capacity = capacity.toInt(),
+                            price = price.toDouble()
+                        )
 
-                        locality = ""
-                        capacity = ""
-                        price = ""
+                        val updatedLocalities = localities.toMutableList().apply {
+                            add(newLocality)
+                        }
+                        onLocalitiesChange(updatedLocalities)
                     }
                 },
                 modifier = Modifier
                     .padding(start = 8.dp),
-                enabled = locality.isNotEmpty() && capacity.isNotEmpty() && price.isNotEmpty()
+                enabled = localityName.isNotEmpty() && capacity.isNotEmpty() && price.isNotEmpty()
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,

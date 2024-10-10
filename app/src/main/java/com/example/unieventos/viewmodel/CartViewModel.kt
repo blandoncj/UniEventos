@@ -11,6 +11,10 @@ class CartViewModel : ViewModel() {
     private val _events = MutableStateFlow(emptyList<CartItem>())
     val events: StateFlow<List<CartItem>> = _events.asStateFlow()
 
+    fun getCart(): List<CartItem> {
+        return _events.value
+    }
+
     fun addToCart(event: CartItem) {
         _events.value = _events.value.toMutableList().apply {
             add(event)
@@ -34,6 +38,10 @@ class CartViewModel : ViewModel() {
 
     fun clearCart() {
         _events.value = emptyList()
+    }
+
+    fun getCartSize(): Int {
+        return _events.value.size
     }
 
 }

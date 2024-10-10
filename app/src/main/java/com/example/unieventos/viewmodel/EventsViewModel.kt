@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import com.example.unieventos.enums.DateError
 import com.example.unieventos.models.Event
+import com.example.unieventos.models.Locality
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,11 +29,12 @@ class EventsViewModel : ViewModel() {
                 description = "Partido de Futbol",
                 date = "2021-10-10",
                 category = "Deportes",
-                imageUrl = "https://loremflickr.com/400/400/football?random",
-                locations = mutableListOf(
-                    Pair("Localidad 1", Pair("100", "50.0")),
-                    Pair("Localidad 2", Pair("200", "100.0"))
-                )  // Lista de localidades con aforo y precio
+                posterImage = "https://loremflickr.com/400/400/football?random",
+                localitiesImage = "https://loremflickr.com/400/400/football?random",
+                localities = mutableListOf(
+                    Locality(0, "Localidad 1", 100, 50.0),
+                    Locality(1, "Localidad 2", 200, 100.0)
+                )
             ),
             Event(
                 id = 2,
@@ -42,8 +44,12 @@ class EventsViewModel : ViewModel() {
                 description = "Partido de Futbol",
                 date = "2021-10-10",
                 category = "Deportes",
-                imageUrl = "https://loremflickr.com/400/400/football?random",
-                locations = mutableListOf()  // Lista vacía si no deseas incluir localidades
+                posterImage = "https://loremflickr.com/400/400/football?random",
+                localitiesImage = "https://loremflickr.com/400/400/football?random",
+                localities = mutableListOf(
+                    Locality(0, "Localidad 1", 100, 50.0),
+                    Locality(1, "Localidad 2", 200, 100.0)
+                )
             ),
             Event(
                 id = 3,
@@ -53,9 +59,11 @@ class EventsViewModel : ViewModel() {
                 description = "Partido de Futbol",
                 date = "2021-10-10",
                 category = "Deportes",
-                imageUrl = "https://loremflickr.com/400/400/football?random",
-                locations = mutableListOf(
-                    Pair("Localidad 1", Pair("150", "75.0"))
+                posterImage = "https://loremflickr.com/400/400/football?random",
+                localitiesImage = "https://loremflickr.com/400/400/football?random",
+                localities = mutableListOf(
+                    Locality(0, "Localidad 1", 100, 50.0),
+                    Locality(1, "Localidad 2", 200, 100.0)
                 )
             ),
             Event(
@@ -66,10 +74,11 @@ class EventsViewModel : ViewModel() {
                 description = "Partido de Futbol",
                 date = "2021-10-10",
                 category = "Deportes",
-                imageUrl = "https://loremflickr.com/400/400/football?random",
-                locations = mutableListOf(
-                    Pair("Localidad 1", Pair("200", "120.0")),
-                    Pair("Localidad 2", Pair("300", "150.0"))
+                posterImage = "https://loremflickr.com/400/400/football?random",
+                localitiesImage = "https://loremflickr.com/400/400/football?random",
+                localities = mutableListOf(
+                    Locality(0, "Localidad 1", 100, 50.0),
+                    Locality(1, "Localidad 2", 200, 100.0)
                 )
             )
         )
@@ -101,6 +110,18 @@ class EventsViewModel : ViewModel() {
         _events.value -= event
     }
 
+    fun addLocality(event: Event, locality: Locality) {
+        val index = _events.value.indexOfFirst { it.name == event.name }
+        if (index != -1) {
+            _events.value = _events.value.toMutableList().apply {
+                get(index).localities.toMutableList().add(locality)
+            }
+        }
+    }
+
+    fun deleteLocality(event: Event, locality: Locality) {
+        event.localities.toMutableList().removeIf({ it.id == locality.id })
+    }
 
     @SuppressLint("NewApi")
     fun validateDate(date: String): DateError {

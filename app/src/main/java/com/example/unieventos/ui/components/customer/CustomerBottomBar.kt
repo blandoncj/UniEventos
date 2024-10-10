@@ -19,11 +19,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.unieventos.R
 import com.example.unieventos.ui.components.customer.navigation.BottomNavItem
 import com.example.unieventos.ui.components.customer.navigation.ItemTabCustomer
+import com.example.unieventos.viewmodel.CartViewModel
 
 @Composable
 fun CustomerBottomBar(
     navController: NavHostController,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
+    cartViewModel: CartViewModel
 ) {
 
     val tabs = listOf(
@@ -43,8 +45,10 @@ fun CustomerBottomBar(
                     if (tab.route == ItemTabCustomer.CartTab) {
                         BadgedBox(
                             badge = {
-                                Badge {
-                                    Text("1")
+                                if (cartViewModel.getCartSize() > 0) {
+                                    Badge {
+                                        Text(cartViewModel.getCartSize().toString())
+                                    }
                                 }
                             }
                         ) {

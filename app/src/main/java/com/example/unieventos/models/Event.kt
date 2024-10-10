@@ -8,6 +8,7 @@ data class Event(
     val description: String,
     val date: String,
     val category: String,
-    val imageUrl: String,
-    val locations: List<Any>
+    val posterImage: String,
+    val localitiesImage: String,
+    val localities: List<Locality>
 )

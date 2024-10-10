@@ -4,7 +4,7 @@ data class CartItem(
     val id: Int,
     val eventId: Int,
     val eventName: String,
-    val eventImage: String,
-    val locationName: String,
+    val eventPosterImage: String,
+    val localityName: String,
     val quantity: Int,
 )

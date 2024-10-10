@@ -5,9 +5,13 @@ import LocalityField
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.enums.DateError
+import com.example.unieventos.models.Locality
 import com.example.unieventos.ui.components.CityField
 import com.example.unieventos.ui.components.utils.DateField
 
@@ -45,12 +50,17 @@ fun EventForm(
     onDateChange: (String) -> Unit,
     isDatePicked: Boolean,
     onDatePickedChange: (Boolean) -> Unit,
-    dateError: DateError
+    dateError: DateError,
+    localities: MutableList<Locality>,
+    onLocalitiesChange: (MutableList<Locality>) -> Unit,
+    posterImage: Uri?,
+    onPosterImageChange: (Uri) -> Unit,
+    localitiesImage: Uri?,
+    onLocalitiesImageChange: (Uri) -> Unit
 ) {
-
-    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-
     Column(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -60,7 +70,8 @@ fun EventForm(
             value = name,
             onValueChange = onNameChange,
             label = { Text(text = stringResource(id = R.string.nam_lbl)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -79,7 +90,8 @@ fun EventForm(
             value = address,
             onValueChange = onAddressChange,
             label = { Text(text = stringResource(id = R.string.address_lbl)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -88,7 +100,8 @@ fun EventForm(
             value = description,
             onValueChange = onDescriptionChange,
             label = { Text(text = stringResource(id = R.string.desc_lbl)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -112,24 +125,40 @@ fun EventForm(
             dateError = dateError
         )
 
+        LocalityField(
+            localities = localities,
+            onLocalitiesChange = onLocalitiesChange
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        localities.forEach { locality ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(text = "Localidad: ${locality.name}, Aforo: ${locality.capacity}, Precio: ${locality.price}")
+            }
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
 
         ImagePicker(
             label = "Imagen poster",
-            imageUri = imageUri,
-            onImagePicked = { imageUri = it }
+            imageUri = posterImage,
+            onImagePicked = onPosterImageChange
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         ImagePicker(
             label = "Imagen localidades",
-            imageUri = imageUri,
-            onImagePicked = { imageUri = it }
+            imageUri = localitiesImage,
+            onImagePicked = onLocalitiesImageChange
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        LocalityField()
     }
 }

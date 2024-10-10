@@ -22,6 +22,7 @@ import com.example.unieventos.R
 import com.example.unieventos.ui.components.customer.CustomerBottomBar
 import com.example.unieventos.ui.components.customer.navigation.NavHostCustomer
 import com.example.unieventos.ui.components.utils.MainTopBar
+import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
@@ -32,6 +33,7 @@ fun CustomerHomeScreen(
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
     couponsViewModel: CouponsViewModel,
+    cartViewModel: CartViewModel,
     userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
     onLogout: () -> Unit
@@ -58,7 +60,8 @@ fun CustomerHomeScreen(
         bottomBar = {
             CustomerBottomBar(
                 navController = navController,
-                onTabSelected = { selectedTab = it }
+                onTabSelected = { selectedTab = it },
+                cartViewModel = cartViewModel
             )
         },
         snackbarHost = {
@@ -75,7 +78,8 @@ fun CustomerHomeScreen(
             userId = userId,
             onNavigateToEventDetail = onNavigateToEventDetail,
             hazeState = hazeState,
-            onLogout = onLogout
+            onLogout = onLogout,
+            cartViewModel = cartViewModel
         )
     }
 }

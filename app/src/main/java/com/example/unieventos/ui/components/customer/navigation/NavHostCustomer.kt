@@ -11,6 +11,7 @@ import com.example.unieventos.ui.screens.CouponsScreen
 import com.example.unieventos.ui.screens.EventsScreen
 import com.example.unieventos.ui.screens.customer.CartScreen
 import com.example.unieventos.ui.screens.customer.CustomerProfileScreen
+import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
@@ -22,6 +23,7 @@ fun NavHostCustomer(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
+    cartViewModel: CartViewModel,
     couponsViewModel: CouponsViewModel,
     userId: Int,
     onNavigateToEventDetail: (Int) -> Unit,
@@ -53,7 +55,10 @@ fun NavHostCustomer(
         }
 
         composable<ItemTabCustomer.CartTab> {
-            CartScreen()
+            CartScreen(
+                cartViewModel = cartViewModel,
+                paddingValues = paddingValues
+            )
         }
 
         composable<ItemTabCustomer.ProfileTab> {

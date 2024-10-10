@@ -1,13 +1,17 @@
 package com.example.unieventos.ui.screens.admin
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.unieventos.R
 import com.example.unieventos.enums.DateError
 import com.example.unieventos.ui.components.events.EventForm
@@ -54,8 +59,19 @@ fun AdminEventDetailScreen(
     var date by rememberSaveable { mutableStateOf(event.date) }
     var isDatePicked by rememberSaveable { mutableStateOf(false) }
     var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
-
+    var localities by rememberSaveable { mutableStateOf(event.localities.toMutableList()) }
     var showDialog by rememberSaveable { mutableStateOf(false) }
+    var posterImage by rememberSaveable { mutableStateOf<Uri?>(event.posterImage.let { Uri.parse(it) }) }
+    var localitiesImage by rememberSaveable {
+        mutableStateOf<Uri?>(event.localitiesImage.let {
+            Uri.parse(
+                it
+            )
+        })
+    }
+
+
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -66,7 +82,8 @@ fun AdminEventDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 30.dp)
+                .verticalScroll(scrollState),
         ) {
             EventForm(
                 name = name,
@@ -90,8 +107,17 @@ fun AdminEventDetailScreen(
                     isDatePicked = it
                     dateError = eventsViewModel.validateDate(date)
                 },
-                dateError = dateError
+                dateError = dateError,
+                localities = localities,
+                onLocalitiesChange = { localities = it },
+                posterImage = posterImage,
+                onPosterImageChange = { posterImage = it },
+                localitiesImage = localitiesImage,
+                onLocalitiesImageChange = { localitiesImage = it }
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -115,9 +141,17 @@ fun AdminEventDetailScreen(
                             address = address,
                             description = description,
                             category = category,
-                            date = date
+                            date = date,
+                            localities = localities,
+                            posterImage = posterImage.toString(),
+                            localitiesImage = localitiesImage.toString()
                         )
                         eventsViewModel.updateEvent(updatedEvent)
+                        Toast.makeText(
+                            context,
+                            R.string.event_updated,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         onBack()
                     },
                 )

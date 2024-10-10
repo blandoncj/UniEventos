@@ -84,6 +84,10 @@
     <string name="account_deleted">Cuenta eliminada exitosamente</string>
     <string name="delete_account_title">Eliminar Cuenta</string>
     <string name="delete_account_msg">¿Estás seguro de eliminar tu cuenta?</string>
+    <string name="coupon_updated">Cupón actualizado exitosamente</string>
+    <string name="event_updated">Evento actualizado exitosamente</string>
+    <string name="coupon_created">Cupón creado exitosamente</string>
+    <string name="event_created">Evento creado exitosamente</string>
 
     <!--    text for the legends of the screens-->
     <string name="about">Acerca de ti</string>

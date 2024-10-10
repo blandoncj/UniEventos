@@ -165,6 +165,7 @@ fun Navigation(
             CustomerHomeScreen(
                 eventsViewModel = eventsViewModel,
                 usersViewModel = usersViewModel,
+                cartViewModel = cartViewModel,
                 couponsViewModel = couponsViewModel,
                 userId = session?.id ?: 0,
                 onNavigateToEventDetail = { eventId ->
@@ -186,14 +187,11 @@ fun Navigation(
             val eventId = it.toRoute<RouteScreen.AdminEventDetail>()
             CustomerEventDetailScreen(
                 eventsViewModel = eventsViewModel,
+                cartViewModel = cartViewModel,
                 eventId = eventId.eventId,
                 onBack = { navController.navigate(RouteScreen.CustomerHome) }
             )
         }
 
-        composable<RouteScreen.Cart> {
-            CartScreen(
-            )
-        }
     }
 }
