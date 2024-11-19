@@ -26,11 +26,11 @@ fun HomeAdminScreen(
     eventsViewModel: EventsViewModel,
     couponsViewModel: CouponsViewModel,
     usersViewModel: UsersViewModel,
-    userId: Int,
-    onNavigateToEventDetail: (Int) -> Unit,
+    userId: String,
+    onNavigateToEventDetail: (String) -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit,
-    onNavigateToCouponDetail: (Int) -> Unit,
+    onNavigateToCouponDetail: (String) -> Unit,
     onLogout: () -> Unit
 ) {
     val hazeState = remember { HazeState() }

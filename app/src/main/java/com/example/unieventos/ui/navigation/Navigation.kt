@@ -1,6 +1,9 @@
 package com.example.unieventos.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +21,6 @@ import com.example.unieventos.ui.screens.customer.ConfirmAccountScreen
 import com.example.unieventos.ui.screens.customer.CustomerEventDetailScreen
 import com.example.unieventos.ui.screens.customer.CustomerHomeScreen
 import com.example.unieventos.ui.screens.RecoverPasswordScreen
-import com.example.unieventos.ui.screens.customer.CartScreen
 import com.example.unieventos.ui.screens.customer.SignupScreen
 import com.example.unieventos.utils.SharedPreferencesUtils
 import com.example.unieventos.viewmodel.CartViewModel
@@ -35,6 +37,7 @@ fun Navigation(
     cartViewModel: CartViewModel
 ) {
     val context = LocalContext.current
+    val currentUser by usersViewModel.currentUser.collectAsState()
     val navController = rememberNavController()
 
     var startDestination: RouteScreen = RouteScreen.Login
@@ -56,17 +59,24 @@ fun Navigation(
                 usersViewModel = usersViewModel,
                 onNavigateToSignup = { navController.navigate(RouteScreen.Signup) },
                 onNavigateToRecoverPassword = { navController.navigate(RouteScreen.RecoverPassword) },
-                onNavigateToHome = { role ->
-                    val home = if (role == Role.ADMIN) {
-                        RouteScreen.AdminHome
-                    } else {
-                        RouteScreen.CustomerHome
-                    }
-                    navController.navigate(home) {
-                        popUpTo(0) {
-                            inclusive = true
+                onNavigateToHome = {
+                    val user = currentUser
+
+                    if (user != null) {
+                        val role = user.role
+                        SharedPreferencesUtils.savePreferences(context, user.id, role)
+
+                        val home = if (role == Role.ADMIN) {
+                            RouteScreen.AdminHome
+                        } else {
+                            RouteScreen.CustomerHome
                         }
-                        launchSingleTop = true
+                        navController.navigate(home) {
+                            popUpTo(0) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
                     }
                 }
             )
@@ -76,26 +86,26 @@ fun Navigation(
             SignupScreen(
                 usersViewModel = usersViewModel,
                 onBack = { navController.navigate(RouteScreen.Login) },
-                onNavigateToConfirmAccount = { navController.navigate(RouteScreen.ConfirmAccount) }
+                onNavigateToConfirmAccount = { navController.navigate(RouteScreen.ConfirmAccount) },
             )
         }
 
         composable<RouteScreen.ConfirmAccount> {
             ConfirmAccountScreen(
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
 
         composable<RouteScreen.RecoverPassword> {
             RecoverPasswordScreen(
                 onBack = { navController.navigate(RouteScreen.Login) },
-                onNavigateToChangePassword = { navController.navigate(RouteScreen.ChangePassword) }
+                onNavigateToChangePassword = { navController.navigate(RouteScreen.ChangePassword) },
             )
         }
 
         composable<RouteScreen.ChangePassword> {
             ChangePasswordScreen(
-                onBack = { navController.navigate(RouteScreen.RecoverPassword) }
+                onBack = { navController.navigate(RouteScreen.RecoverPassword) },
             )
         }
 
@@ -104,7 +114,7 @@ fun Navigation(
                 eventsViewModel = eventsViewModel,
                 couponsViewModel = couponsViewModel,
                 usersViewModel = usersViewModel,
-                userId = session?.id ?: 0,
+                userId = session?.id ?: "",
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEvent) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(
@@ -132,7 +142,7 @@ fun Navigation(
         composable<RouteScreen.CreateEvent> {
             CreateEventScreen(
                 onBack = { navController.popBackStack() },
-                eventsViewModel = eventsViewModel
+                eventsViewModel = eventsViewModel,
             )
         }
 
@@ -141,14 +151,14 @@ fun Navigation(
             AdminEventDetailScreen(
                 eventsViewModel = eventsViewModel,
                 eventId = eventId.eventId,
-                onBack = { navController.navigate(RouteScreen.AdminHome) }
+                onBack = { navController.navigate(RouteScreen.AdminHome) },
             )
         }
 
         composable<RouteScreen.CreateCoupon> {
             CreateCouponScreen(
                 couponsViewModel = couponsViewModel,
-                onBack = { navController.navigate(RouteScreen.AdminHome) }
+                onBack = { navController.navigate(RouteScreen.AdminHome) },
             )
         }
 
@@ -157,7 +167,7 @@ fun Navigation(
             CouponDetailScreen(
                 couponsViewModel = couponsViewModel,
                 couponId = couponId.couponId,
-                onBack = { navController.navigate(RouteScreen.AdminHome) }
+                onBack = { navController.navigate(RouteScreen.AdminHome) },
             )
         }
 
@@ -167,7 +177,7 @@ fun Navigation(
                 usersViewModel = usersViewModel,
                 cartViewModel = cartViewModel,
                 couponsViewModel = couponsViewModel,
-                userId = session?.id ?: 0,
+                userId = session?.id ?: "",
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.CustomerEventDetail(eventId))
                 },
@@ -179,7 +189,7 @@ fun Navigation(
                         }
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
 
@@ -189,7 +199,7 @@ fun Navigation(
                 eventsViewModel = eventsViewModel,
                 cartViewModel = cartViewModel,
                 eventId = eventId.eventId,
-                onBack = { navController.navigate(RouteScreen.CustomerHome) }
+                onBack = { navController.navigate(RouteScreen.CustomerHome) },
             )
         }
 

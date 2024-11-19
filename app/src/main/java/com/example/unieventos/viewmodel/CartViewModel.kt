@@ -11,7 +11,7 @@ class CartViewModel : ViewModel() {
     private val _events = MutableStateFlow(emptyList<CartItem>())
     val events: StateFlow<List<CartItem>> = _events.asStateFlow()
 
-    fun getCart(): List<CartItem> {
+    fun getItemsCart(): List<CartItem> {
         return _events.value
     }
 
@@ -42,6 +42,10 @@ class CartViewModel : ViewModel() {
 
     fun getCartSize(): Int {
         return _events.value.size
+    }
+
+    fun getTotal(): Double {
+        return _events.value.sumOf { it.price * it.quantity }
     }
 
 }

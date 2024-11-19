@@ -21,18 +21,6 @@ import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.ui.components.utils.SecondaryButton
 import com.example.unieventos.viewmodel.UsersViewModel
 
-/**
- * LoginForm composable is a reusable component that displays the login form.
- * @param email The email input value.
- * @param emailError The email input error state.
- * @param password The password input value.
- * @param passwordError The password input error state.
- * @param onEmailChange The callback to handle email input changes.
- * @param onPasswordChange The callback to handle password input changes.
- * @param onForgotPassword The callback to handle forgot password button click.
- * @param onLogin The callback to handle login button click.
- * @param onSignup The callback to handle signup button click.
- */
 @Composable
 fun LoginForm(
     email: String,
@@ -44,7 +32,6 @@ fun LoginForm(
     onForgotPassword: () -> Unit,
     onLogin: () -> Unit,
     onSignup: () -> Unit,
-    usersViewModel: UsersViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,9 +75,9 @@ fun LoginForm(
 
         PrimaryButton(
             text = stringResource(id = R.string.login_btn),
-            enabled = emailError == EmailError.NONE && passwordError == PasswordError.NONE && usersViewModel.validateFields(
-                listOf(email, password)
-            ),
+//            enabled = emailError == EmailError.NONE && passwordError == PasswordError.NONE && usersViewModel.validateFields(
+//                listOf(email, password)
+//            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

@@ -17,8 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.unieventos.R
 import com.example.unieventos.enums.DateError
+import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.events.EventForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
@@ -37,14 +40,14 @@ import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun AdminEventDetailScreen(
+    eventId: String,
     eventsViewModel: EventsViewModel,
-    eventId: Int,
     onBack: () -> Unit
 ) {
-    val event = eventsViewModel.getEventById(eventId)
+    var event by remember { mutableStateOf(Event()) }
 
-    if (event == null) {
-        return
+    LaunchedEffect(eventId) {
+        event = eventsViewModel.getEventById(eventId)!!
     }
 
     val context = LocalContext.current
@@ -70,8 +73,21 @@ fun AdminEventDetailScreen(
         })
     }
 
-
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(event) {
+        event.let {
+            name = it.name
+            city = it.city
+            address = it.address
+            description = it.description
+            date = it.date
+            category = it.category
+            posterImage = it.posterImage.let { Uri.parse(it) }
+            localitiesImage = it.localitiesImage.let { Uri.parse(it) }
+            localities = it.localities.toMutableList()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -180,7 +196,7 @@ fun AdminEventDetailScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        eventsViewModel.deleteEvent(event)
+                        eventsViewModel.deleteEvent(event.id)
                         showDialog = false
                         Toast.makeText(
                             context,

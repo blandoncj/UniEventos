@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,10 +30,14 @@ import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
-import com.example.unieventos.models.Customer
+import com.example.unieventos.enums.Role
+import com.example.unieventos.models.User
+import com.example.unieventos.ui.components.AlertMessage
+import com.example.unieventos.ui.components.AlertType
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.customer.CustomerForm
 import com.example.unieventos.ui.components.utils.PrimaryButton
+import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.utils.validateCedula
 import com.example.unieventos.utils.validateEmail
 import com.example.unieventos.utils.validateFields
@@ -37,20 +46,16 @@ import com.example.unieventos.utils.validatePasswordFormat
 import com.example.unieventos.utils.validatePasswordsMatch
 import com.example.unieventos.utils.validatePhone
 import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.delay
 
-/**
- * Signup screen composable function.
- *
- * @param usersViewModel ViewModel that contains the users data.
- * @param onBack Function that navigates back.
- * @param onNavigateToConfirmAccount Function that navigates to the confirm account screen.
- */
 @Composable
 fun SignupScreen(
     usersViewModel: UsersViewModel,
     onBack: () -> Unit,
     onNavigateToConfirmAccount: () -> Unit
 ) {
+    val authResult by usersViewModel.authResult.collectAsState()
+
     var cedula by rememberSaveable { mutableStateOf("") }
     var cedulaError by rememberSaveable { mutableStateOf(CedulaError.NONE) }
     var name by rememberSaveable { mutableStateOf("") }
@@ -88,19 +93,19 @@ fun SignupScreen(
                 cedula = cedula,
                 onCedulaChange = {
                     cedula = it
-                    cedulaError = usersViewModel.validateCedula(it)
+//                    cedulaError = usersViewModel.validateCedula(it)
                 },
                 cedulaError = cedulaError,
                 name = name,
                 onNameChange = {
                     name = it
-                    nameError = usersViewModel.validateName(it)
+//                    nameError = usersViewModel.validateName(it)
                 },
                 nameError = nameError,
                 phone = phone,
                 onPhoneChange = {
                     phone = it
-                    phoneError = usersViewModel.validatePhone(it)
+//                    phoneError = usersViewModel.validatePhone(it)
                 },
                 phoneError = phoneError,
                 city = city,
@@ -110,19 +115,19 @@ fun SignupScreen(
                 email = email,
                 onEmailChange = {
                     email = it
-                    emailError = usersViewModel.validateEmail(it)
+//                    emailError = usersViewModel.validateEmail(it)
                 },
                 emailError = emailError,
                 password = password,
                 onPasswordChange = {
                     password = it
-                    passwordError = usersViewModel.validatePasswordFormat(it)
+//                    passwordError = usersViewModel.validatePasswordFormat(it)
                 },
                 passwordError = passwordError,
                 confirmPassword = confirmPassword,
                 onConfirmPasswordChange = {
                     confirmPassword = it
-                    confirmPasswordError = usersViewModel.validatePasswordsMatch(password, it)
+//                    confirmPasswordError = usersViewModel.validatePasswordsMatch(password, it)
                 },
                 confirmPasswordError = confirmPasswordError
             )
@@ -132,14 +137,16 @@ fun SignupScreen(
             PrimaryButton(
                 text = stringResource(id = R.string.register_btn),
                 modifier = Modifier.fillMaxWidth(),
+                /*
                 enabled = cedulaError == CedulaError.NONE &&
                         nameError == NameError.NONE &&
                         phoneError == PhoneError.NONE &&
                         emailError == EmailError.NONE &&
                         passwordError == PasswordError.NONE &&
                         confirmPasswordError == PasswordError.NONE,
+
+                 */
                 onClick = {
-//                    onNavigateToConfirmAccount()
                     if (cedulaError == CedulaError.NONE &&
                         nameError == NameError.NONE &&
                         phoneError == PhoneError.NONE &&
@@ -148,21 +155,48 @@ fun SignupScreen(
                         confirmPasswordError == PasswordError.NONE
                     ) {
 
-                        val customer = Customer(
-                            id = 0,
+                        val customer = User(
                             cedula = cedula,
                             name = name,
                             phone = phone,
                             city = city,
                             email = email,
-                            password = password
+                            password = password,
                         )
 
                         usersViewModel.createUser(customer)
-                        onNavigateToConfirmAccount()
+                        //onNavigateToConfirmAccount()
                     }
                 }
             )
+
+            when (authResult) {
+                is RequestResult.Loading -> {
+                    LinearProgressIndicator()
+                }
+                is RequestResult.Success -> {
+                    AlertMessage(
+                        type = AlertType.SUCCESS,
+                        message = (authResult as RequestResult.Success).message
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(2000)
+                        onNavigateToConfirmAccount()
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                is RequestResult.Error -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Error).errorMessage
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(2000)
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                null -> {}
+            }
         }
     }
 }

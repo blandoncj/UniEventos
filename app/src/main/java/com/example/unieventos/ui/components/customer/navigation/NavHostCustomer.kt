@@ -25,8 +25,8 @@ fun NavHostCustomer(
     usersViewModel: UsersViewModel,
     cartViewModel: CartViewModel,
     couponsViewModel: CouponsViewModel,
-    userId: Int,
-    onNavigateToEventDetail: (Int) -> Unit,
+    userId: String,
+    onNavigateToEventDetail: (String) -> Unit,
     hazeState: HazeState,
     onLogout: () -> Unit
 ) {

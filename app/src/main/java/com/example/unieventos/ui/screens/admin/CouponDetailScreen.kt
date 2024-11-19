@@ -14,8 +14,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,6 +29,7 @@ import com.example.unieventos.R
 import com.example.unieventos.enums.CouponCodeError
 import com.example.unieventos.enums.CouponNameError
 import com.example.unieventos.enums.DateError
+import com.example.unieventos.models.Coupon
 import com.example.unieventos.ui.components.coupons.CouponForm
 import com.example.unieventos.ui.components.utils.CustomTopAppBar
 import com.example.unieventos.ui.components.utils.PrimaryButton
@@ -36,13 +39,13 @@ import com.example.unieventos.viewmodel.CouponsViewModel
 @Composable
 fun CouponDetailScreen(
     couponsViewModel: CouponsViewModel,
-    couponId: Int,
-    onBack: () -> Unit
+    couponId: String,
+    onBack: () -> Unit,
 ) {
-    val coupon = couponsViewModel.getCouponById(couponId)
+    var coupon by remember { mutableStateOf(Coupon()) }
 
-    if (coupon == null) {
-        return
+    LaunchedEffect(couponId) {
+        coupon = couponsViewModel.getCouponById(couponId)!!
     }
 
     val context = LocalContext.current
@@ -58,6 +61,15 @@ fun CouponDetailScreen(
     var dateError by rememberSaveable { mutableStateOf(DateError.NONE) }
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(coupon) {
+        coupon.let {
+            name = it.name
+            code = it.code
+            discount = it.discount.toString()
+            expirationDate = it.expirationDate
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -156,7 +168,7 @@ fun CouponDetailScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        couponsViewModel.deleteCoupon(coupon)
+                        couponsViewModel.deleteCoupon(coupon.id)
                         showDialog = false
                         Toast.makeText(
                             context,

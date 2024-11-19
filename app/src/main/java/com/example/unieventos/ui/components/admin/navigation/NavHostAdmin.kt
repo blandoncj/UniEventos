@@ -22,9 +22,9 @@ fun NavHostAdmin(
     eventsViewModel: EventsViewModel,
     couponsViewModel: CouponsViewModel,
     usersViewModel: UsersViewModel,
-    userId: Int,
-    onNavigateToEventDetail: (Int) -> Unit,
-    onNavigateToCouponDetail: (Int) -> Unit,
+    userId: String,
+    onNavigateToEventDetail: (String) -> Unit,
+    onNavigateToCouponDetail: (String) -> Unit,
     hazeState: HazeState
 ) {
     NavHost(

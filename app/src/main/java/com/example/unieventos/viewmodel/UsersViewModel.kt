@@ -1,148 +1,138 @@
 package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unieventos.enums.CedulaError
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
-import com.example.unieventos.enums.Role
-import com.example.unieventos.models.Customer
 import com.example.unieventos.models.User
+import com.example.unieventos.utils.RequestResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class UsersViewModel : ViewModel() {
+    private val auth = FirebaseAuth.getInstance()
+    private val db = Firebase.firestore
 
-    private val _users = MutableStateFlow(emptyList<User>())
-    val users: StateFlow<List<User>> = _users.asStateFlow()
+    private val _authResult = MutableStateFlow<RequestResult?>(null)
+    val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
+
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
     init {
-        _users.value = getUsers()
+        auth.currentUser?.uid?.let { uid ->
+            viewModelScope.launch { _currentUser.value = getUserById(uid) }
+        }
     }
 
-    fun getUserById(id: Int): User? {
-        return _users.value.find { it.id == id }
-    }
+    private suspend fun createUserFirebase(user: User) {
+        val response = auth.createUserWithEmailAndPassword(user.email, user.password).await()
+        val userId = response.user?.uid ?: throw Exception("No se pudo crear el usuario")
 
-    fun getUserByEmail(email: String): User? {
-        return _users.value.find { it.email == email }
-    }
-
-    fun getCustomerByCedula(cedula: String): Customer? {
-        return _users.value.filterIsInstance<Customer>().find { it.cedula == cedula }
-    }
-
-    fun getCustomerByPhone(phone: String): Customer? {
-        return _users.value.filterIsInstance<Customer>().find { it.phone == phone }
+        val userSave = user.copy(id = userId, password = "")
+        db.collection("users").document(userId).set(userSave).await()
     }
 
     fun createUser(user: User) {
-        _users.value += user
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = runCatching { createUserFirebase(user) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Usuario creado exitosamente") },
+                    onFailure = { handleAuthError(it) }
+                )
+        }
     }
 
-    fun updateUser(user: User) {
-        val index = _users.value.indexOfFirst { it.id == user.id }
-        if (index != -1) {
-            _users.value = _users.value.toMutableList().apply {
-                set(index, user)
+    private fun handleAuthError(e: Throwable): RequestResult.Error {
+        val errorMessage = when (e) {
+            is FirebaseAuthException -> {
+                when (e.errorCode) {
+                    "ERROR_INVALID_EMAIL" -> "Correo inválido"
+                    "ERROR_WRONG_PASSWORD" -> "Contraseña incorrecta"
+                    "ERROR_EMAIL_ALREADY_IN_USE" -> "Correo ya registrado"
+                    else -> "Error al crear el usuario ${e.message}"
+                }
             }
+            else -> "Error al crear el usuario ${e.message}"
+        }
+        return RequestResult.Error(errorMessage)
+    }
+
+    fun resetAuthResult() {
+        _authResult.value = null
+    }
+
+    private suspend fun deleteUserFirebase(userId: String) {
+        db.collection("users").document(userId).delete().await()
+    }
+
+    fun deleteUser(userId: String) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = runCatching { deleteUserFirebase(userId) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Usuario eliminado exitosamente") },
+                    onFailure = { RequestResult.Error(it.toString()) }
+                )
         }
     }
 
-    fun deleteUser(user: User) {
-        _users.value -= user
+    private suspend fun loginFirebase(email: String, password: String) {
+        val response = auth.signInWithEmailAndPassword(email, password).await()
+        val userId = response.user?.uid ?: throw Exception("No se pudo iniciar sesión")
+
+        val user = getUserById(userId)
+        _currentUser.value = user
     }
 
-    fun login(email: String, password: String): User? {
-        return _users.value.find { it.email == email && it.password == password }
-    }
-
-    private fun getUsers(): List<User> {
-        return listOf(
-            User(
-                1,
-                "Juan",
-                Role.ADMIN,
-                "admin@eam.com",
-                "123456"
-            ),
-            Customer(
-                "1092850716",
-                "Armenia",
-                "3226843150",
-                2,
-                "Jacobo",
-                "customer@eam.com",
-                "123456"
-            ),
-        )
-    }
-
-    fun validateCedula(cedula: String): CedulaError {
-        return when {
-            cedula.isEmpty() -> CedulaError.EMPTY
-            cedula.length != 10 && cedula.length != 8 -> CedulaError.INVALID_LENGTH
-            cedula == getCustomerByCedula(cedula)?.cedula -> CedulaError.ALREADY_REGISTERED
-            else -> CedulaError.NONE
+    fun login(email: String, password: String) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = runCatching { loginFirebase(email, password) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Sesión iniciada exitosamente") },
+                    onFailure = { handleAuthError(it) }
+                )
         }
     }
 
-    fun validateName(name: String): NameError {
-        return when {
-            name.isEmpty() -> NameError.EMPTY
-            name.length < 3 -> NameError.INVALID_LENGTH
-            !name.matches(Regex("^[\\p{L} .'-]+$")) -> NameError.INVALID_FORMAT
-            else -> NameError.NONE
+    suspend fun getUsers(): List<User> {
+        val snapshot =
+            db
+                .collection("users")
+                .get()
+                .await()
+
+        return snapshot.documents.mapNotNull {
+            val user = it.toObject(User::class.java)
+            requireNotNull(user)
+            user.id = it.id
+            user
         }
     }
 
-    fun validatePhone(phone: String): PhoneError {
-        return when {
-            phone.isEmpty() -> PhoneError.EMPTY
-            phone.length != 10 -> PhoneError.INVALID_LENGTH
-            phone == getCustomerByPhone(phone)?.phone -> PhoneError.ALREADY_REGISTERED
-            else -> PhoneError.NONE
-        }
-    }
+    suspend fun getUserById(id: String): User? {
+        val snapshot =
+            db
+                .collection("users")
+                .document(id)
+                .get()
+                .await()
 
-    fun validateEmail(email: String): EmailError {
-        return when {
-            email.isEmpty() -> EmailError.EMPTY
-            email == getUserByEmail(email)?.email -> EmailError.ALREADY_REGISTERED
-            validateEmailFormat(email) == EmailError.INVALID_FORMAT -> EmailError.INVALID_FORMAT
-            else -> EmailError.NONE
-        }
-    }
-
-    fun validateEmailFormat(email: String): EmailError {
-        return when {
-            email.isEmpty() -> EmailError.EMPTY
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email)
-                .matches() -> EmailError.INVALID_FORMAT
-
-            else -> EmailError.NONE
-        }
-    }
-
-    fun validatePasswordFormat(password: String): PasswordError {
-        return when {
-            password.isEmpty() -> PasswordError.EMPTY
-            password.length < 8 -> PasswordError.INVALID_LENGTH
-            else -> PasswordError.NONE
-        }
-    }
-
-    fun validatePasswordsMatch(password: String, confirmPassword: String): PasswordError {
-        return when {
-            password != confirmPassword -> PasswordError.INCORRECT
-            else -> PasswordError.NONE
-        }
-    }
-
-    fun validateFields(fields: List<String>): Boolean {
-        return fields.all { it.isNotEmpty() }
+        val user = snapshot.toObject(User::class.java)
+        user?.id = snapshot.id
+        return user
     }
 
 }

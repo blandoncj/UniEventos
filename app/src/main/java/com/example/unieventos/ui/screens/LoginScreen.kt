@@ -6,8 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,31 +26,27 @@ import com.example.unieventos.R
 import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.Role
+import com.example.unieventos.ui.components.AlertMessage
+import com.example.unieventos.ui.components.AlertType
 import com.example.unieventos.ui.components.LoginForm
+import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.utils.SharedPreferencesUtils
 import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.delay
 
-/**
- * login form composable is a screen that displays the login form.
- * @param usersViewModel The view model to handle the users data.
- * @param onNavigateToSignup The callback to navigate to the signup screen.
- * @param onNavigateToRecoverPassword The callback to navigate to the recover password screen.
- * @param onNavigateToAdminHome The callback to navigate to  the admin home screen.
- */
 @Composable
 fun LoginScreen(
     usersViewModel: UsersViewModel,
     onNavigateToSignup: () -> Unit,
     onNavigateToRecoverPassword: () -> Unit,
-    onNavigateToHome: (Role) -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
+    val authResult by usersViewModel.authResult.collectAsState()
+
     var email by rememberSaveable { mutableStateOf("") }
     var emailError by rememberSaveable { mutableStateOf(EmailError.NONE) }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
-
-    val context = LocalContext.current
-    val validationMessage = stringResource(id = R.string.invalid_credentials)
 
     Scaffold { padding ->
         Column(
@@ -60,7 +61,7 @@ fun LoginScreen(
                 email = email,
                 onEmailChange = {
                     email = it
-                    emailError = usersViewModel.validateEmailFormat(it)
+//                    emailError = usersViewModel.validateEmailFormat(it)
                 },
                 emailError = emailError,
                 password = password,
@@ -69,17 +70,36 @@ fun LoginScreen(
                 onForgotPassword = onNavigateToRecoverPassword,
                 onSignup = onNavigateToSignup,
                 onLogin = {
-                    val user = usersViewModel.login(email, password)
-
-                    if (user != null) {
-                        SharedPreferencesUtils.savePreferences(context, user.id, user.role)
-                        onNavigateToHome(user.role)
-                    } else {
-                        Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
-                    }
+                    usersViewModel.login(email, password)
                 },
-                usersViewModel = usersViewModel
             )
+
+            when (authResult) {
+                is RequestResult.Loading -> {
+                    LinearProgressIndicator()
+                }
+
+                is RequestResult.Success -> {
+                    LaunchedEffect(Unit) {
+                        delay(2000)
+                        onNavigateToHome()
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+
+                is RequestResult.Error -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Error).errorMessage
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(2000)
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+
+                null -> {}
+            }
         }
     }
 }

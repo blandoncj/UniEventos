@@ -6,20 +6,20 @@ import com.example.unieventos.enums.Role
 
 object SharedPreferencesUtils {
 
-    fun savePreferences(context: Context, userId: Int, role: Role) {
+    fun savePreferences(context: Context, userId: String, role: Role) {
         val sharedPreferences = context.getSharedPreferences("session", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putInt("userId", userId)
+        editor.putString("userId", userId)
         editor.putString("role", role.toString())
         editor.apply()
     }
 
     fun getCurrentUser(context: Context): UserDTO? {
         val sharedPreferences = context.getSharedPreferences("session", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getInt("userId", 0)
+        val userId = sharedPreferences.getString("userId","")
         val role = sharedPreferences.getString("role", "")
 
-        return if (userId == 0 || role.isNullOrEmpty()) {
+        return if (userId.isNullOrEmpty() || role.isNullOrEmpty()) {
             null
         } else {
             UserDTO(userId, Role.valueOf(role))

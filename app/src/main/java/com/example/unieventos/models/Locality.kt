@@ -1,8 +1,8 @@
 package com.example.unieventos.models
 
 data class Locality(
-    val id: Int,
-    val name: String,
-    val capacity: Int,
-    val price: Double
+    var id: String = "",
+    val name: String = "",
+    val capacity: Int = 0,
+    val price: Double = 0.0
 )

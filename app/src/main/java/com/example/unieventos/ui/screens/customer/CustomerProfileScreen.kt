@@ -16,8 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,7 +33,7 @@ import com.example.unieventos.enums.EmailError
 import com.example.unieventos.enums.NameError
 import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
-import com.example.unieventos.models.Customer
+import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.customer.CustomerForm
 import com.example.unieventos.ui.components.utils.PrimaryButton
 import com.example.unieventos.ui.components.utils.SecondaryButton
@@ -50,42 +52,47 @@ import dev.chrisbanes.haze.haze
 @Composable
 fun CustomerProfileScreen(
     usersViewModel: UsersViewModel,
-    userId: Int,
+    userId: String,
     paddingValues: PaddingValues,
     hazeState: HazeState,
     onLogout: () -> Unit
 ) {
-    val user = usersViewModel.getUserById(userId)
+    var user by remember { mutableStateOf(User()) }
 
-    if (user == null) {
-        return
-    }
-
-    val customer = user as? Customer
-    if (customer == null) {
-        return
+    LaunchedEffect(userId) {
+        user = usersViewModel.getUserById(userId)!!
     }
 
     val context = LocalContext.current
 
-    var cedula by rememberSaveable { mutableStateOf(customer.cedula) }
+    var cedula by rememberSaveable { mutableStateOf(user.cedula) }
     var cedulaError by rememberSaveable { mutableStateOf(CedulaError.NONE) }
-    var name by rememberSaveable { mutableStateOf(customer.name) }
+    var name by rememberSaveable { mutableStateOf(user.name) }
     var nameError by rememberSaveable { mutableStateOf(NameError.NONE) }
-    var city by rememberSaveable { mutableStateOf(customer.city) }
+    var city by rememberSaveable { mutableStateOf(user.city) }
     var expandedCity by rememberSaveable { mutableStateOf(false) }
-    var phone by rememberSaveable { mutableStateOf(customer.phone) }
+    var phone by rememberSaveable { mutableStateOf(user.phone) }
     var phoneError by rememberSaveable { mutableStateOf(PhoneError.NONE) }
-    var email by rememberSaveable { mutableStateOf(customer.email) }
+    var email by rememberSaveable { mutableStateOf(user.email) }
     var emailError by rememberSaveable { mutableStateOf(EmailError.NONE) }
-    var password by rememberSaveable { mutableStateOf(customer.password) }
+    var password by rememberSaveable { mutableStateOf(user.password) }
     var passwordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
-    var confirmPassword by rememberSaveable { mutableStateOf(customer.password) }
+    var confirmPassword by rememberSaveable { mutableStateOf(user.password) }
     var confirmPasswordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(user) {
+        cedula = user.cedula
+        name = user.name
+        city = user.city
+        phone = user.phone
+        email = user.email
+        password = user.password
+        confirmPassword = user.password
+    }
 
     Column(
         modifier = Modifier
@@ -112,14 +119,14 @@ fun CustomerProfileScreen(
             name = name,
             onNameChange = {
                 name = it
-                nameError = usersViewModel.validateName(it)
+//                nameError = usersViewModel.validateName(it)
             },
             nameError = nameError,
             phone = phone,
             onPhoneChange = {
                 phone = it
-                if (phone != customer.phone) {
-                    phoneError = usersViewModel.validatePhone(it)
+                if (phone != user.phone) {
+//                    phoneError = usersViewModel.validatePhone(it)
                 }
             },
             phoneError = phoneError,
@@ -130,21 +137,21 @@ fun CustomerProfileScreen(
             email = email,
             onEmailChange = {
                 email = it
-                if (email != customer.email) {
-                    emailError = usersViewModel.validateEmail(it)
+                if (email != user.email) {
+//                    emailError = usersViewModel.validateEmail(it)
                 }
             },
             emailError = emailError,
             password = password,
             onPasswordChange = {
                 password = it
-                passwordError = usersViewModel.validatePasswordFormat(it)
+//                passwordError = usersViewModel.validatePasswordFormat(it)
             },
             passwordError = passwordError,
             confirmPassword = confirmPassword,
             onConfirmPasswordChange = {
                 confirmPassword = it
-                confirmPasswordError = usersViewModel.validatePasswordsMatch(password, it)
+//                confirmPasswordError = usersViewModel.validatePasswordsMatch(password, it)
             },
             confirmPasswordError = confirmPasswordError
         )
@@ -190,8 +197,7 @@ fun CustomerProfileScreen(
                         )
                     )
                 ) {
-                    val updatedCustomer = Customer(
-                        id = userId,
+                    val updatedCustomer = User(
                         cedula = cedula,
                         name = name,
                         phone = phone,
@@ -199,7 +205,7 @@ fun CustomerProfileScreen(
                         email = email,
                         password = password
                     )
-                    usersViewModel.updateUser(updatedCustomer)
+//                    usersViewModel.updateUser(updatedCustomer)
                     Toast.makeText(context, R.string.account_updated, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -224,7 +230,7 @@ fun CustomerProfileScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        usersViewModel.deleteUser(customer)
+                        usersViewModel.deleteUser(userId)
                         showDialog = false
                         Toast.makeText(
                             context,

@@ -113,7 +113,6 @@ fun CreateCouponScreen(
                 onClick = {
 
                     val coupon = Coupon(
-                        id = 0,
                         name = name,
                         code = code,
                         discount = discount.toInt(),

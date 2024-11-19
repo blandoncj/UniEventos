@@ -67,7 +67,6 @@ fun LocalityField(
                 onClick = {
                     if (localityName.isNotEmpty() && capacity.isNotEmpty() && price.isNotEmpty()) {
                         val newLocality = Locality(
-                            id = localities.size,
                             name = localityName,
                             capacity = capacity.toInt(),
                             price = price.toDouble()

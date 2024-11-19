@@ -13,8 +13,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,21 +54,8 @@ fun CreateEventScreen(
 
     var localities by rememberSaveable { mutableStateOf(mutableListOf<Locality>()) }
 
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    fun clearFields() {
-        name = ""
-        city = ""
-        address = ""
-        description = ""
-        category = ""
-        date = ""
-        isDatePicked = false
-        posterImage = null
-        localitiesImage = null
-        localities.clear()
-    }
 
     Scaffold(
         topBar = {
@@ -107,7 +96,6 @@ fun CreateEventScreen(
                 isDatePicked = isDatePicked,
                 onDatePickedChange = {
                     isDatePicked = it
-                    dateError = eventsViewModel.validateDate(date)
                 },
                 dateError = dateError,
                 localities = localities,
@@ -130,7 +118,7 @@ fun CreateEventScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     val event = Event(
-                        id = 0,
+                        id = "",
                         name = name,
                         city = city,
                         address = address,
@@ -142,12 +130,7 @@ fun CreateEventScreen(
                         localitiesImage = localitiesImage.toString()
                     )
                     eventsViewModel.createEvent(event)
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.event_created),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    clearFields()
+                    onBack()
                 }
             )
         }

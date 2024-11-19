@@ -2,108 +2,118 @@ package com.example.unieventos.viewmodel
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unieventos.enums.CouponCodeError
 import com.example.unieventos.enums.CouponNameError
 import com.example.unieventos.enums.DateError
-import com.example.unieventos.enums.NameError
 import com.example.unieventos.models.Coupon
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 
 class CouponsViewModel : ViewModel() {
-
+    val db = Firebase.firestore
     private val _coupons = MutableStateFlow(emptyList<Coupon>())
     val coupons: StateFlow<List<Coupon>> = _coupons.asStateFlow()
 
     init {
-        _coupons.value = getCoupons()
+        loadCoupons()
     }
 
-    fun getCouponById(id: Int): Coupon? {
-        return _coupons.value.find { it.id == id }
-    }
-
-    fun getCouponByCode(code: String): Coupon? {
-        return _coupons.value.find { it.code == code }
-    }
-
-    fun getCouponByName(name: String): Coupon? {
-        return _coupons.value.find { it.name == name }
-    }
-
-    fun createCoupon(coupon: Coupon) {
-        _coupons.value += coupon
-    }
-
-    fun updateCoupon(coupon: Coupon) {
-        val index = _coupons.value.indexOfFirst { it.id == coupon.id }
-        if (index != -1) {
-            _coupons.value = _coupons.value.toMutableList().apply {
-                set(index, coupon)
-            }
+    private fun loadCoupons() {
+        viewModelScope.launch {
+            _coupons.value = getCoupons()
         }
     }
 
-    fun deleteCoupon(coupon: Coupon) {
-        _coupons.value -= coupon
+    suspend fun getCoupons(): List<Coupon> {
+        val snapshot =
+            db
+                .collection("coupons")
+                .get()
+                .await()
+
+        return snapshot.documents.mapNotNull {
+            val coupon = it.toObject(Coupon::class.java)
+            requireNotNull(coupon)
+            coupon.id = it.id
+            coupon
+        }
     }
 
-    private fun getCoupons(): List<Coupon> {
-        return listOf(
-            Coupon(
-                1,
-                "Cupón 1",
-                "2A1083AFK",
-                10,
-                "05-09-2024"
-            ),
-            Coupon(
-                2,
-                "Cupón 2",
-                "2A1083AFK",
-                10,
-                "05-09-2024"
-            ),
-            Coupon(
-                3,
-                "Cupón 3",
-                "2A1083AFK",
-                10,
-                "05-09-2024"
-            ),
-            Coupon(
-                4,
-                "Cupón 4",
-                "2A1083AFK",
-                10,
-                "05-09-2024"
-            ),
-        )
+    suspend fun getCouponById(id: String): Coupon? {
+        val snapshot =
+            db
+                .collection("coupons")
+                .document(id)
+                .get()
+                .await()
+
+        val coupon = snapshot.toObject(Coupon::class.java)
+        coupon?.id = snapshot.id
+        return coupon
     }
 
-    fun validateName(name: String): CouponNameError {
-        return when {
+    fun createCoupon(coupon: Coupon) {
+        viewModelScope.launch {
+            db
+                .collection("coupons")
+                .add(coupon)
+                .await()
+            loadCoupons()
+        }
+    }
+
+    fun updateCoupon(coupon: Coupon) {
+        viewModelScope.launch {
+            db
+                .collection("coupons")
+                .document(coupon.id)
+                .set(coupon)
+                .await()
+            loadCoupons()
+        }
+    }
+
+    fun deleteCoupon(id: String) {
+        viewModelScope.launch {
+            db
+                .collection("coupons")
+                .document(id)
+                .delete()
+                .await()
+            loadCoupons()
+        }
+    }
+
+    fun getCouponByCode(code: String): Coupon? = _coupons.value.find { it.code == code }
+
+    fun getCouponByName(name: String): Coupon? = _coupons.value.find { it.name == name }
+
+    fun validateName(name: String): CouponNameError =
+        when {
             name.isEmpty() -> CouponNameError.EMPTY
             name.length < 3 -> CouponNameError.INVALID_LENGTH
             name == getCouponByName(name)?.name -> CouponNameError.ALREADY_EXISTS
             else -> CouponNameError.NONE
         }
-    }
 
-    fun validateCode(code: String): CouponCodeError {
-        return when {
+    fun validateCode(code: String): CouponCodeError =
+        when {
             code.isEmpty() -> CouponCodeError.EMPTY
             code.length < 6 -> CouponCodeError.INVALID_LENGTH
             code == getCouponByCode(code)?.code -> CouponCodeError.ALREADY_EXISTS
             else -> CouponCodeError.NONE
         }
-    }
 
     @SuppressLint("NewApi")
-    fun validateDate(date: String): DateError {
-        return try {
+    fun validateDate(date: String): DateError =
+        try {
             val expirationDate = LocalDate.parse(date)
             if (expirationDate.isBefore(LocalDate.now())) {
                 DateError.INVALID
@@ -113,6 +123,5 @@ class CouponsViewModel : ViewModel() {
         } catch (e: Exception) {
             DateError.NONE
         }
-    }
-
 }
+

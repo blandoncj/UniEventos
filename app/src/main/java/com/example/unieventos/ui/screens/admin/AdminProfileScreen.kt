@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.admin
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,14 +35,14 @@ import dev.chrisbanes.haze.haze
 @Composable
 fun AdminProfileScreen(
     usersViewModel: UsersViewModel,
-    userId: Int,
+    userId: String,
     hazeState: HazeState,
     paddingValues: PaddingValues
 ) {
-    val user = usersViewModel.getUserById(userId)
+    var user by remember { mutableStateOf(User()) }
 
-    if (user == null) {
-        return
+    LaunchedEffect(userId) {
+        user = usersViewModel.getUserById(userId)!!
     }
 
     var name by rememberSaveable { mutableStateOf(user.name) }
@@ -50,6 +53,13 @@ fun AdminProfileScreen(
     var passwordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
     var confirmPassword by rememberSaveable { mutableStateOf(user.password) }
     var confirmPasswordError by rememberSaveable { mutableStateOf(PasswordError.NONE) }
+
+    LaunchedEffect(user) {
+        name = user.name
+        email = user.email
+        password = user.password
+        confirmPassword = user.password
+    }
 
     Column(
         modifier = Modifier
@@ -66,7 +76,7 @@ fun AdminProfileScreen(
             name = name,
             onNameChange = {
                 name = it
-                nameError = usersViewModel.validateName(name)
+//                nameError = usersViewModel.validateName(name)
             },
             nameError = nameError,
             modifier = Modifier.fillMaxWidth()
@@ -79,7 +89,7 @@ fun AdminProfileScreen(
             onEmailChange = {
                 email = it
                 if (email != user.email) {
-                    emailError = usersViewModel.validateEmail(email)
+//                    emailError = usersViewModel.validateEmail(email)
                 }
             },
             emailError = emailError,
@@ -92,7 +102,7 @@ fun AdminProfileScreen(
             password = password,
             onPasswordChange = {
                 password = it
-                passwordError = usersViewModel.validatePasswordFormat(password)
+//                passwordError = usersViewModel.validatePasswordFormat(password)
             },
             passwordError = passwordError,
             modifier = Modifier.fillMaxWidth()
@@ -105,8 +115,8 @@ fun AdminProfileScreen(
             password = confirmPassword,
             onPasswordChange = {
                 confirmPassword = it
-                confirmPasswordError =
-                    usersViewModel.validatePasswordsMatch(password, confirmPassword)
+//                confirmPasswordError =
+//                    usersViewModel.validatePasswordsMatch(password, confirmPassword)
             },
             passwordError = confirmPasswordError,
             modifier = Modifier.fillMaxWidth()
@@ -119,13 +129,12 @@ fun AdminProfileScreen(
             onClick = {
                 if (nameError == NameError.NONE && emailError == EmailError.NONE && passwordError == PasswordError.NONE && confirmPasswordError == PasswordError.NONE) {
                     val updatedUser = User(
-                        id = userId,
                         role = user.role,
                         name = name,
                         email = email,
                         password = password
                     )
-                    usersViewModel.updateUser(updatedUser)
+//                    usersViewModel.updateUser(updatedUser)
                 }
             }
         )

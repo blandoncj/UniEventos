@@ -19,12 +19,16 @@
     <string name="address_lbl">Dirección</string>
     <string name="events_lbl">Eventos</string>
     <string name="coupons_lbl">Cupones</string>
+    <string name="coupon_lbl">Cupón</string>
     <string name="profile_lbl">Perfil</string>
     <string name="exp_lbl">Válido hasta</string>
     <string name="locality">Localidad</string>
     <string name="capacity">Aforo</string>
     <string name="price">Precio</string>
     <string name="cart_lbl">Carrito</string>
+    <string name="order_summary_lbl">Resumen de la Orden</string>
+    <string name="total_lbl">Total</string>
+    <string name="pay_lbl">Pagar</string>
 
     <!-- text for placeholders -->
     <string name="cit_ph">Seleccione una ciudad</string>
@@ -71,6 +75,8 @@
     <string name="create_event_btn">Crear Evento</string>
     <string name="update_event_btn">Actualizar Evento</string>
     <string name="delete_event_btn">Eliminar Evento</string>
+    <string name="apply_btn">Aplicar</string>
+
 
     <!-- text for alert dialogs and notifications -->
     <string name="event_deleted">Evento eliminado exitosamente</string>

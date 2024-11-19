@@ -24,7 +24,7 @@ import dev.chrisbanes.haze.haze
 fun CouponsScreen(
     couponsViewModel: CouponsViewModel,
     paddingValues: PaddingValues,
-    onNavigateToCouponDetail: (Int) -> Unit,
+    onNavigateToCouponDetail: (String) -> Unit,
     hazeState: HazeState
 ) {
 

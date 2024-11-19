@@ -24,7 +24,7 @@ import dev.chrisbanes.haze.haze
 fun EventsScreen(
     eventsViewModel: EventsViewModel,
     paddingValues: PaddingValues,
-    onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (String) -> Unit,
     hazeState: HazeState
 ) {
 
