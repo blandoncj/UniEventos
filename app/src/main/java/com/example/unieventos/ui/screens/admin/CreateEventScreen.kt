@@ -2,7 +2,11 @@ package com.example.unieventos.ui.screens.admin
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,6 +60,7 @@ fun CreateEventScreen(
 
     val scrollState = rememberScrollState()
 
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -106,33 +111,53 @@ fun CreateEventScreen(
                 onLocalitiesImageChange = { localitiesImage = it }
             )
 
-            PrimaryButton(
-                text = stringResource(id = R.string.create_event_btn),
-                enabled = name.isNotEmpty() &&
-                        city.isNotEmpty() &&
-                        address.isNotEmpty() &&
-                        description.isNotEmpty() &&
-                        category.isNotEmpty() &&
-                        date.isNotEmpty() &&
-                        localities.isNotEmpty(),
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    val event = Event(
-                        id = "",
-                        name = name,
-                        city = city,
-                        address = address,
-                        description = description,
-                        date = date,
-                        category = category,
-                        localities = localities,
-                        posterImage = posterImage.toString(),
-                        localitiesImage = localitiesImage.toString()
-                    )
-                    eventsViewModel.createEvent(event)
-                    onBack()
-                }
-            )
+                contentAlignment = Alignment.Center
+            ) {
+
+                PrimaryButton(
+                    text = stringResource(id = R.string.create_event_btn),
+                    enabled = name.isNotEmpty() &&
+                            city.isNotEmpty() &&
+                            address.isNotEmpty() &&
+                            description.isNotEmpty() &&
+                            category.isNotEmpty() &&
+                            date.isNotEmpty() &&
+                            localities.isNotEmpty(),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        val event = Event(
+                            id = "",
+                            name = name,
+                            city = city,
+                            address = address,
+                            description = description,
+                            date = date,
+                            category = category,
+                            localities = localities,
+                            posterImage = posterImage.toString(),
+                            localitiesImage = localitiesImage.toString()
+                        )
+                        eventsViewModel.createEvent(event)
+                        Toast.makeText(
+                            context,
+                            R.string.event_updated,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        onBack()
+
+                    },
+                )
+
+
+            }
         }
     }
 }
+
