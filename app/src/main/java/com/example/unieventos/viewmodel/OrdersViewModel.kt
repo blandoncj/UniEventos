@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unieventos.models.Order
 import com.example.unieventos.utils.RequestResult
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +23,21 @@ class OrdersViewModel : ViewModel() {
     private val _orderResult = MutableStateFlow<RequestResult?>(null)
     val orderResult: StateFlow<RequestResult?> = _orderResult.asStateFlow()
 
-    private suspend fun getOrdersFirebase(): List<Order> {
-        val snapshot = db.collection("orders").get().await()
+    init {
+        viewModelScope.launch {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                _orders.value = getOrdersFirebase(userId)
+            } else {
+                _orders.value = emptyList()
+            }
+        }
+    }
+
+    private suspend fun getOrdersFirebase(userId: String): List<Order> {
+        val snapshot = db.collection("orders")
+            .whereEqualTo("userId", userId)
+            .get().await()
 
         return snapshot.documents.mapNotNull {
             it.toObject(Order::class.java)?.apply {
@@ -32,18 +46,27 @@ class OrdersViewModel : ViewModel() {
         }
     }
 
-    private suspend fun createOrderFirebase(order: Order) {
-        db.collection("orders").add(order).await()
+    private suspend fun createOrderInFirebase(order: Order) {
+        val orderRef = db.collection("orders").add(order).await()
+
+        db.collection("users")
+            .document(order.userId)
+            .collection("history")
+            .document(orderRef.id)
+            .set(order)
+            .await()
     }
 
     fun createOrder(order: Order) {
         viewModelScope.launch {
             _orderResult.value = RequestResult.Loading
-            _orderResult.value = runCatching { createOrderFirebase(order) }
-                .fold(
-                    onSuccess = { RequestResult.Success("Orden creada exitosamente") },
-                    onFailure = { RequestResult.Error("Error al crear la orden") }
-                )
+            try {
+                createOrderInFirebase(order)
+                _orders.value = getOrdersFirebase(order.userId)
+                _orderResult.value = RequestResult.Success("Order created successfully!")
+            } catch (e: Exception) {
+                _orderResult.value = RequestResult.Error(e.message ?: "Error creating order")
+            }
         }
     }
 
@@ -51,4 +74,7 @@ class OrdersViewModel : ViewModel() {
         _orderResult.value = null
     }
 
+    private fun getCurrentUserId(): String? {
+        return FirebaseAuth.getInstance().currentUser?.uid
+    }
 }

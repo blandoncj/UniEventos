@@ -24,6 +24,7 @@ import com.example.unieventos.R
 import com.example.unieventos.ui.components.customer.CustomerBottomBar
 import com.example.unieventos.ui.components.customer.navigation.NavHostCustomer
 import com.example.unieventos.ui.components.orders.ConfirmOrderDialog
+import com.example.unieventos.ui.components.orders.HistoryOrderDialog
 import com.example.unieventos.ui.components.utils.MainTopBar
 import com.example.unieventos.viewmodel.CartViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
@@ -47,6 +48,7 @@ fun CustomerHomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var selectedTab by remember { mutableIntStateOf(0) }
     var showDialog by remember { mutableStateOf(false) }
+    var showHistoryDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -106,7 +108,14 @@ fun CustomerHomeScreen(
         if (showDialog) {
             ConfirmOrderDialog(
                 cartViewModel = cartViewModel,
-                onDismiss = { showDialog = !showDialog }
+                onDismiss = { showDialog = !showDialog },
+                onViewHistory = { showHistoryDialog = true }
+            )
+        }
+
+        if (showHistoryDialog) {
+            HistoryOrderDialog(
+                onDismiss = { showHistoryDialog = false }
             )
         }
     }

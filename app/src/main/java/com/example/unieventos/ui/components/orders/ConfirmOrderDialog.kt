@@ -1,6 +1,8 @@
 package com.example.unieventos.ui.components.orders
 
+import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,27 +43,37 @@ import com.example.unieventos.viewmodel.OrdersViewModel
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmOrderDialog(
     cartViewModel: CartViewModel,
     ordersViewModel: OrdersViewModel = OrdersViewModel(),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onViewHistory: () -> Unit
 ) {
     val orderResult by ordersViewModel.orderResult.collectAsState()
-
+    val orders by ordersViewModel.orders.collectAsState()
     val context = LocalContext.current
     val userId = SharedPreferencesUtils.getCurrentUser(context)?.id
-    val items = cartViewModel.getItemsCart()
-        .map {
-            OrderItem(
-                eventId = it.eventId,
-                quantity = it.quantity,
-                price = it.price,
-                localityName = it.localityName,
-            )
-        }
+
+    if (userId == null) {
+        AlertMessage(
+            type = AlertType.ERROR,
+            message = stringResource(id = R.string.error_user_not_found)
+        )
+        return
+    }
+
+    val items = cartViewModel.getItemsCart().map {
+        OrderItem(
+            eventId = it.eventId,
+            quantity = it.quantity,
+            price = it.price,
+            localityName = it.localityName,
+        )
+    }
 
     var showDiscount by remember { mutableStateOf(false) }
     var coupon by remember { mutableStateOf("") }
@@ -71,24 +83,26 @@ fun ConfirmOrderDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    ordersViewModel.createOrder(
-                        Order(
-                            date = LocalDateTime.now().toString(),
-                            total = cartViewModel.getTotal(),
-                            userId = userId!!,
-                            items = items
+                    if (items.isNotEmpty()) {
+                        ordersViewModel.createOrder(
+                            Order(
+                                date = LocalDateTime.now().toString(),
+                                total = cartViewModel.getTotal(),
+                                userId = userId,
+                                items = items
+                            )
                         )
-                    )
-                    onDismiss()
+                        cartViewModel.clearCart()
+                    } else {
+                        Log.d("ConfirmOrderDialog", "Cart is empty")
+                    }
                 }
             ) {
                 Text(text = stringResource(id = R.string.confirm_btn))
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = onDismiss
-            ) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(id = R.string.cancel_btn))
             }
         },
@@ -106,64 +120,73 @@ fun ConfirmOrderDialog(
                         value = coupon,
                         onValueChange = { coupon = it },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.5f),
+                        modifier = Modifier.fillMaxWidth(0.7f),
                         placeholder = { Text(text = stringResource(id = R.string.coupons_lbl)) }
                     )
                     TextButton(
-                        modifier = Modifier.weight(1f),
                         onClick = { showDiscount = !showDiscount }
                     ) {
                         Text(text = stringResource(id = R.string.apply_btn))
                     }
+                }
 
-                    if (showDiscount) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Subtotal: ${cartViewModel.getTotal()}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            textDecoration = TextDecoration.LineThrough,
-                            textAlign = TextAlign.End
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (showDiscount) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Subtotal: ${cartViewModel.getTotal()}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        textDecoration = TextDecoration.LineThrough,
+                        textAlign = TextAlign.End
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Subtotal: ${cartViewModel.getTotal()}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.End
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                when (orderResult) {
+                    is RequestResult.Loading -> {
+                        LinearProgressIndicator()
+                    }
+                    is RequestResult.Success -> {
+                        AlertMessage(
+                            type = AlertType.SUCCESS,
+                            message = stringResource(id = R.string.success_order_message),
                         )
-                    } else {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Subtotal: ${cartViewModel.getTotal()}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.End
+
+                        LaunchedEffect(Unit) {
+                            delay(3000)
+                            ordersViewModel.resetOrderResult()
+                            onDismiss()
+                        }
+                    }
+                    is RequestResult.Error -> {
+                        AlertMessage(
+                            type = AlertType.ERROR,
+                            message = (orderResult as RequestResult.Error).errorMessage,
                         )
+
+                        LaunchedEffect(Unit) {
+                            delay(3000)
+                            ordersViewModel.resetOrderResult()
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    null -> {
+//                        Text("Cargando...")
+                    }
+                }
 
-                    when (orderResult) {
-                        null -> {}
-                        is RequestResult.Loading -> {
-                            LinearProgressIndicator()
-                        }
-                        is RequestResult.Success -> {
-                            AlertMessage(
-                                type = AlertType.SUCCESS,
-                                message = (orderResult as RequestResult.Success).message,
-                            )
-
-                            LaunchedEffect(Unit) {
-                                delay(5000)
-                                onDismiss()
-                                cartViewModel.clearCart()
-                                ordersViewModel.resetOrderResult()
-                            }
-                        }
-                        is RequestResult.Error -> {
-                            AlertMessage(
-                                type = AlertType.ERROR,
-                                message = (orderResult as RequestResult.Error).errorMessage,
-                            )
-
-                            LaunchedEffect(Unit) {
-                                delay(5000)
-                                ordersViewModel.resetOrderResult()
-                            }
-                        }
+                if (orders.isNotEmpty()) {
+                    TextButton(onClick = onViewHistory) {
+                        Text(text = stringResource(id = R.string.view_order_history))
                     }
                 }
             }

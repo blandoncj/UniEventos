@@ -24,17 +24,25 @@ fun CartScreen(
 ) {
     val cartItems = cartViewModel.events.collectAsState().value
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-    ) {
-        items(cartItems) {
-            CartItemView(
-                cartItem = it,
-                cartViewModel = cartViewModel
-            )
+    if (cartItems.isEmpty()) {
+        Text(
+            text = "El carrito está vacío",
+            modifier = Modifier.padding(16.dp)
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            items(cartItems) { item ->
+                CartItemView(
+                    cartItem = item,
+                    cartViewModel = cartViewModel
+                )
+            }
         }
     }
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.unieventos.viewmodel
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unieventos.enums.CedulaError
@@ -9,6 +11,7 @@ import com.example.unieventos.enums.PasswordError
 import com.example.unieventos.enums.PhoneError
 import com.example.unieventos.models.User
 import com.example.unieventos.utils.RequestResult
+import com.example.unieventos.utils.SharedPreferencesUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.ktx.firestore
@@ -20,12 +23,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class UsersViewModel : ViewModel() {
+
     private val auth = FirebaseAuth.getInstance()
+
     private val db = Firebase.firestore
-
     private val _authResult = MutableStateFlow<RequestResult?>(null)
-    val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
 
+    val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
@@ -98,6 +102,9 @@ class UsersViewModel : ViewModel() {
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
+            if(_currentUser.value != null) {
+                _currentUser.value = null
+            }
             _authResult.value = RequestResult.Loading
             _authResult.value = runCatching { loginFirebase(email, password) }
                 .fold(

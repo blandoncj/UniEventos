@@ -1,0 +1,107 @@
+    <resources>
+    <string name="app_name">UniEventos</string>
+
+    <!-- text for labels -->
+        <string name="ced_lbl">ID</string>
+        <string name="nam_lbl">Name</string>
+        <string name="cit_lbl">City</string>
+        <string name="pho_lbl">Phone</string>
+        <string name="date_lbl">Date</string>
+        <string name="pass_lbl">Password</string>
+        <string name="pass_confirm_lbl">Confirm Password</string>
+        <string name="cod_lbl">Code</string>
+        <string name="create_evt_lbl">Create Event</string>
+        <string name="desc_lbl">Description</string>
+        <string name="cat_lbl">Category</string>
+        <string name="create_cpn_lbl">Create Coupon</string>
+        <string name="disc_lbl">Discount</string>
+        <string name="ema_lbl">Email</string>
+        <string name="address_lbl">Address</string>
+        <string name="events_lbl">Events</string>
+        <string name="coupons_lbl">Coupons</string>
+        <string name="coupon_lbl">Coupon</string>
+        <string name="profile_lbl">Profile</string>
+        <string name="exp_lbl">Valid Until</string>
+        <string name="locality">Locality</string>
+        <string name="capacity">Capacity</string>
+        <string name="price">Price</string>
+        <string name="cart_lbl">Cart</string>
+        <string name="order_summary_lbl">Order Summary</string>
+        <string name="total_lbl">Total</string>
+        <string name="pay_lbl">Pay</string>
+
+    <!-- text for placeholders -->
+        <string name="cit_ph">Select a city</string>
+        <string name="cat_ph">Select a category</string>
+        <string name="cpn_disc_ph">Select a discount</string>
+        <string name="date_ph">Select a date</string>
+
+    <!-- text for error messages -->
+        <string name="empty_field">This field cannot be empty.</string>
+        <string name="ced_length_err">Invalid ID, must contain 8 or 10 digits.</string>
+        <string name="ced_exists_err">Invalid ID, an account with this ID already exists.</string>
+        <string name="nam_length_err">Invalid name, must contain at least 3 characters.</string>
+        <string name="nam_format_err">Invalid name, can only contain letters and spaces.</string>
+        <string name="cpn_nam_exists_err">Invalid name, already in use.</string>
+        <string name="pho_length_err">Invalid phone number, must contain 10 digits.</string>
+        <string name="pho_exists_err">Invalid phone number, an account with this number already exists.</string>
+        <string name="pass_length_err">Invalid password, must contain at least 6 characters.</string>
+        <string name="pass_match_err">Passwords do not match.</string>
+        <string name="cod_length_err">Invalid code, must contain 6 digits.</string>
+        <string name="cod_found_err">Invalid code, please verify it is correct.</string>
+        <string name="evt_desc_length">Invalid description, must contain at least 10 characters.</string>
+        <string name="evt_date_err">Invalid date, must be after the current date.</string>
+        <string name="cpn_cod_length_err">Invalid code, must contain 6 characters.</string>
+        <string name="cpn_cod_exists_err">Invalid code, already in use.</string>
+        <string name="ema_format_err">Invalid email address.</string>
+        <string name="ema_exists_err">Invalid email address, an account with this email already exists.</string>
+        <string name="invalid_credentials">Incorrect username or password.</string>
+        <string name="invalid_date_err">Invalid date, must be after the current date.</string>
+
+    <!--    text for the buttons-->
+        <string name="login_btn">Login</string>
+        <string name="register_btn">Register</string>
+        <string name="create_account_btn">Create Account</string>
+        <string name="update_account_btn">Update Account</string>
+        <string name="delete_account_btn">Delete Account</string>
+        <string name="forgot_password_btn">Forgot your password?</string>
+        <string name="send_code_btn">Send Code</string>
+        <string name="confirm_btn">Confirm</string>
+        <string name="resend_code_btn">Resend Code</string>
+        <string name="cancel_btn">Cancel</string>
+        <string name="create_coupon_btn">Create Coupon</string>
+        <string name="update_coupon_btn">Update Coupon</string>
+        <string name="delete_coupon_btn">Delete Coupon</string>
+        <string name="create_event_btn">Create Event</string>
+        <string name="update_event_btn">Update Event</string>
+        <string name="delete_event_btn">Delete Event</string>
+        <string name="apply_btn">Apply</string>
+        <string name="close_btn">Close</string>
+        <string name="order_history_lbl">Order history</string>
+
+    <!-- text for alert dialogs and notifications -->
+        <string name="error_user_not_found">Error finding user</string>
+        <string name="error_empty_cart">Error: empty cart</string>
+        <string name="view_order_history">View all orders</string>
+        <string name="success_order_message">Your order was successfully confirmed!</string>
+        <string name="event_deleted">Event successfully deleted</string>
+        <string name="delete_event_title">Delete Event</string>
+        <string name="delete_event_msg">Are you sure you want to delete this event?</string>
+        <string name="coupon_deleted">Coupon successfully deleted</string>
+        <string name="delete_coupon_title">Delete Coupon</string>
+        <string name="delete_coupon_msg">Are you sure you want to delete this coupon?</string>
+        <string name="dismiss_btn">Cancel</string>
+        <string name="account_updated">Account successfully updated</string>
+        <string name="account_deleted">Account successfully deleted</string>
+        <string name="delete_account_title">Delete Account</string>
+        <string name="delete_account_msg">Are you sure you want to delete your account?</string>
+        <string name="coupon_updated">Coupon successfully updated</string>
+        <string name="event_updated">Event successfully updated</string>
+        <string name="coupon_created">Coupon successfully created</string>
+        <string name="event_created">Event successfully created</string>
+
+    <!--    text for the legends of the screens-->
+    <string name="about">About you</string>
+    <string name="recover_password">Enter your email address so we can send you a recovery code.</string>
+    <string name="code_description">We will send you a 6-digit code to your email. Enter it below.</string>
+</resources>

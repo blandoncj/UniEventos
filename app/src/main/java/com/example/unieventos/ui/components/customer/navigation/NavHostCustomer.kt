@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.unieventos.ui.components.orders.HistoryOrderDialog
 import com.example.unieventos.ui.screens.CouponsScreen
 import com.example.unieventos.ui.screens.EventsScreen
 import com.example.unieventos.ui.screens.customer.CartScreen
@@ -70,6 +71,7 @@ fun NavHostCustomer(
                 onLogout = onLogout
             )
         }
+
     }
 
 }
