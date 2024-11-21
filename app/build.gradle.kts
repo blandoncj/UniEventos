@@ -72,5 +72,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coil.compose)
     implementation(libs.haze.compose)
+    implementation(libs.cloudinary.android)
 }
 
